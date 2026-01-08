@@ -1,0 +1,323 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
+             x:Class="OtelV3.Views.NewRoomView"
+             x:DataType="vm:NewRoomViewModel"
+             Background="{DynamicResource InputBackground}">
+
+    <UserControl.Resources>
+        <Color x:Key="PrimaryColor">#11b4d4</Color>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+        <SolidColorBrush x:Key="BackgroundLightBrush" Color="#f6f8f8"/>
+        <SolidColorBrush x:Key="SurfaceLightBrush" Color="{DynamicResource SurfaceMain}"/>
+        <SolidColorBrush x:Key="BorderLightBrush" Color="#dbe4e6"/>
+        <SolidColorBrush x:Key="TextMainBrush" Color="#111718"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#618389"/>
+        <BoxShadows x:Key="SoftShadow">0 4 6 0 #0D11b4d4, 0 2 4 -1 #0811b4d4</BoxShadows>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        
+        <!-- GLOBAL INPUT STYLES -->
+        <!-- TextBox Style -->
+        <Style Selector="TextBox">
+            <Setter Property="MinHeight" Value="52"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InputBackgroundPointerOver}"/>
+        </Style>
+        
+        <!-- ComboBox Style -->
+        <Style Selector="ComboBox">
+            <Setter Property="MinHeight" Value="52"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style Selector="ComboBox:pointerover /template/ Border#Background">
+             <Setter Property="Background" Value="{DynamicResource InputBackgroundPointerOver}"/>
+        </Style>
+        <!-- Fix ComboBox Focus Color -->
+        <Style Selector="ComboBox:focus /template/ Border#Background">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+
+        <!-- Card Radio Button Style -->
+        <Style Selector="RadioButton.cardRadio">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="CardBorder" 
+                            BorderBrush="{DynamicResource BorderColorLight}" 
+                            BorderThickness="1" 
+                            CornerRadius="10" 
+                            Background="{DynamicResource InputBackground}"
+                            Padding="16">
+                         <Grid ColumnDefinitions="Auto, *, Auto">
+                            <Border Name="Dot" Width="12" Height="12" CornerRadius="6" Margin="0,0,16,0"
+                                    Background="{TemplateBinding Background}" />
+                            
+                            <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content}" 
+                                              FontWeight="Medium" VerticalAlignment="Center" FontSize="15"
+                                              Foreground="{DynamicResource PrimaryText}"/>
+                            
+                            <mi:MaterialIcon Name="CheckIcon" Kind="CheckCircle" Grid.Column="2" 
+                                             Width="24" Height="24" Opacity="0"
+                                             Foreground="{TemplateBinding Background}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        
+        <Style Selector="RadioButton.cardRadio:checked /template/ Border#CardBorder">
+             <Setter Property="Background" Value="{DynamicResource SelectedBackground}"/>
+             <Setter Property="BorderBrush" Value="{DynamicResource SelectedBrush}"/>
+        </Style>
+        <Style Selector="RadioButton.cardRadio:checked /template/ mi|MaterialIcon#CheckIcon">
+             <Setter Property="Opacity" Value="1"/>
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *, Auto"> 
+        
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="0,0,0,1" Padding="0,24">
+            <Grid MaxWidth="1800" HorizontalAlignment="Stretch" ColumnDefinitions="*, Auto" Margin="32,0">
+                
+                <!-- Title & Breadcrumb -->
+                <StackPanel Grid.Column="0" Spacing="8" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="Ana Sayfa" Foreground="{DynamicResource SecondaryText}" FontSize="13" />
+                        <mi:MaterialIcon Kind="ChevronRight" Foreground="{DynamicResource SecondaryText}" Width="16" Height="16" />
+                        <TextBlock Text="Odalar" Foreground="{DynamicResource SecondaryText}" FontSize="13" />
+                        <mi:MaterialIcon Kind="ChevronRight" Foreground="{DynamicResource SecondaryText}" Width="16" Height="16" />
+                        <TextBlock Text="Yeni Oda Ekle" Foreground="{StaticResource PrimaryBrush}" FontWeight="SemiBold" FontSize="13" />
+                    </StackPanel>
+                    
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Yeni Oda Ekle" FontSize="28" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" LetterSpacing="-0.5"/>
+                        <TextBlock Text="Otel envanterine yeni bir oda tanımlayın." FontSize="16" Foreground="{DynamicResource SecondaryText}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Help Button -->
+                <Button Grid.Column="1" VerticalAlignment="Center" Content="Yardım" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" CornerRadius="8" Padding="20,10" Foreground="{DynamicResource SecondaryText}" FontWeight="SemiBold" FontSize="14">
+                     <Button.Styles>
+                         <Style Selector="Button:pointerover /template/ ContentPresenter">
+                             <Setter Property="Background" Value="#f9fafb"/>
+                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                             <Setter Property="TextBlock.Foreground" Value="{StaticResource PrimaryBrush}"/>
+                         </Style>
+                     </Button.Styles>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Scrollable Content -->
+        <ScrollViewer Grid.Row="1" Padding="32">
+            <Grid ColumnDefinitions="*, 40, 450" MaxWidth="1800" HorizontalAlignment="Stretch">
+                
+                <!-- Left Column (Form) -->
+                <StackPanel Grid.Column="0" Spacing="24">
+                    
+                    <!-- General Info Card -->
+                    <Border Background="{DynamicResource CardBackground}" CornerRadius="20" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" Padding="32" BoxShadow="{StaticResource SoftShadow}">
+                        <StackPanel Spacing="32">
+                            <!-- Card Header -->
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="40" Height="40" CornerRadius="10" Background="#e0f2fe"> <!-- Light Blue Bg -->
+                                     <mi:MaterialIcon Kind="InformationVariant" Foreground="{StaticResource PrimaryBrush}" Width="24" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Genel Bilgiler" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBlock Text="Odanın temel özelliklerini giriniz" FontSize="13" Foreground="{DynamicResource SecondaryText}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <!-- Form Grid: More defined spacing -->
+                            <Grid ColumnDefinitions="*, 24, *" RowDefinitions="Auto, 24, Auto, 24, Auto">
+                                <!-- Row 0 -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="8">
+                                    <TextBlock Text="Oda Numarası" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" FontSize="14" />
+                                    <TextBox Text="{Binding RoomNumber}" Watermark="Örn: 101" />
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Row="0" Grid.Column="2" Spacing="8">
+                                    <TextBlock Text="Kat Numarası" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" FontSize="14" />
+                                    <TextBox Text="{Binding Floor}" Watermark="Örn: 1" />
+                                </StackPanel>
+                                
+                                <!-- Row 1 -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="8">
+                                    <TextBlock Text="Oda Tipi" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" FontSize="14" />
+                                    <ComboBox ItemsSource="{Binding RoomTypes}" SelectedItem="{Binding SelectedRoomType}" 
+                                              PlaceholderText="Seçiniz..." />
+                                </StackPanel>
+                                
+                                <!-- Capacity Custom Control -->
+                                <StackPanel Grid.Row="2" Grid.Column="2" Spacing="8">
+                                    <TextBlock Text="Kapasite (Kişi)" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" FontSize="14" />
+                                    <!-- Matches TextBox Style: MinHeight=52, Radius=10 -->
+                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource BorderColorLight}" Background="{DynamicResource InputBackground}" Height="52">
+                                        <Grid ColumnDefinitions="52, *, 52">
+                                            <Button Grid.Column="0" Command="{Binding DecreaseCapacityCommand}" Background="Transparent" BorderThickness="0" CornerRadius="10,0,0,10" Cursor="Hand" Padding="0">
+                                                <mi:MaterialIcon Kind="Minus" Foreground="{DynamicResource SecondaryText}" Width="20" Height="20"/>
+                                            </Button>
+                                            <TextBlock Grid.Column="1" Text="{Binding Capacity}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" FontSize="16"/>
+                                            <Button Grid.Column="2" Command="{Binding IncreaseCapacityCommand}" Background="Transparent" BorderThickness="0" CornerRadius="0,10,10,0" Cursor="Hand" Padding="0">
+                                                <mi:MaterialIcon Kind="Plus" Foreground="{DynamicResource SecondaryText}" Width="20" Height="20"/>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                                
+                                 <!-- Row 2: Price (Full Width or Split?) Let's stick to full with better internal grid -->
+                                <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Spacing="8">
+                                    <TextBlock Text="Günlük Fiyat" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" FontSize="14" />
+                                    <Grid>
+                                        <TextBox Text="{Binding Price}" Watermark="0.00" Padding="40,0,80,0" FontWeight="Bold" FontSize="16" />
+                                        <TextBlock Text="₺" Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Center" Margin="20,0,0,0" FontWeight="Bold" FontSize="16"/>
+                                        <TextBlock Text="/ Gece" Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" FontSize="13"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Description Card -->
+                    <Border Background="{DynamicResource CardBackground}" CornerRadius="20" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" Padding="32" BoxShadow="{StaticResource SoftShadow}">
+                        <StackPanel Spacing="24">
+                            <!-- Card Header -->
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="40" Height="40" CornerRadius="10" Background="#fef3c7"> <!-- Amber/Yellow Bg separate styling -->
+                                     <mi:MaterialIcon Kind="NoteTextOutline" Foreground="#d97706" Width="24" Height="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Detaylar &amp; Notlar" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBlock Text="Oda hakkında varsa ek açıklamalar" FontSize="13" Foreground="{DynamicResource SecondaryText}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                             <StackPanel Spacing="8">
+                                <TextBlock Text="Ek Notlar" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" FontSize="14" />
+                                <TextBox Text="{Binding Notes}" Watermark="Oda manzara bilgisi, balkon durumu veya diğer notlar..." Height="120" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="16" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                
+                <!-- Right Column (Sidebar) -->
+                <StackPanel Grid.Column="2" Spacing="24">
+                    
+                    <!-- Status Card -->
+                    <Border Background="{DynamicResource CardBackground}" CornerRadius="20" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" Padding="24" BoxShadow="{StaticResource SoftShadow}">
+                        <StackPanel Spacing="24">
+                             <StackPanel Orientation="Horizontal" Spacing="12">
+                                 <!-- Simple Icon logic or just text -->
+                                <TextBlock Text="Durum" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            
+                            <StackPanel Spacing="12">
+                                <RadioButton GroupName="Status" IsChecked="{Binding IsAvailableSelected}" Classes="cardRadio" Content="Müsait (Boş)">
+                                    <RadioButton.Resources>
+                                        <SolidColorBrush x:Key="SelectedBackground" Color="#2010b981"/>
+                                        <SolidColorBrush x:Key="SelectedBrush" Color="#10b981"/> 
+                                    </RadioButton.Resources>
+                                    <RadioButton.Background>#10b981</RadioButton.Background>
+                                </RadioButton>
+                                
+                                <RadioButton GroupName="Status" IsChecked="{Binding IsCleaningSelected}" Classes="cardRadio" Content="Temizlik Bekliyor">
+                                    <RadioButton.Resources>
+                                         <SolidColorBrush x:Key="SelectedBackground" Color="#20f59e0b"/>
+                                        <SolidColorBrush x:Key="SelectedBrush" Color="#f59e0b"/> 
+                                    </RadioButton.Resources>
+                                    <RadioButton.Background>#f59e0b</RadioButton.Background>
+                                </RadioButton>
+                                
+                                <RadioButton GroupName="Status" IsChecked="{Binding IsMaintenanceSelected}" Classes="cardRadio" Content="Bakımda / Kapalı">
+                                    <RadioButton.Resources>
+                                         <SolidColorBrush x:Key="SelectedBackground" Color="#20ef4444"/>
+                                        <SolidColorBrush x:Key="SelectedBrush" Color="#ef4444"/> 
+                                    </RadioButton.Resources>
+                                    <RadioButton.Background>#ef4444</RadioButton.Background>
+                                </RadioButton>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Amenities Card -->
+                    <Border Background="{DynamicResource CardBackground}" CornerRadius="20" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" Padding="24" BoxShadow="{StaticResource SoftShadow}">
+                         <StackPanel Spacing="24">
+                            <TextBlock Text="Özellikler" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                            
+                              <ItemsControl ItemsSource="{Binding Amenities}">
+                                 <ItemsControl.ItemTemplate>
+                                     <DataTemplate>
+                                         <CheckBox IsChecked="{Binding IsChecked}" Margin="0,4" Cursor="Hand" Padding="8,0,0,0">
+                                             <TextBlock Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                                         </CheckBox>
+                                     </DataTemplate>
+                                 </ItemsControl.ItemTemplate>
+                             </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                    
+                </StackPanel>
+                
+            </Grid>
+        </ScrollViewer>
+        
+        <!-- Sticky Footer -->
+        <Border Grid.Row="2" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="0,1,0,0" Padding="32,24" BoxShadow="0 -4 6 -1 #0D000000">
+            <Grid MaxWidth="1800" HorizontalAlignment="Stretch">
+                 <!-- Just aligning buttons to the right, using Grid to ensure maxwidth constraint applies -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="16">
+                    <Button Command="{Binding CancelCommand}" Content="İptal" Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontWeight="SemiBold" FontSize="15" Padding="24,12" CornerRadius="10" Cursor="Hand" BorderThickness="0">
+                         <Button.Styles>
+                             <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background" Value="#f3f4f6"/>
+                                <Setter Property="TextBlock.Foreground" Value="{DynamicResource TextMainBrush}"/>
+                             </Style>
+                        </Button.Styles>
+                    </Button>
+                    
+                    <Button Command="{Binding SaveCommand}" Background="{StaticResource PrimaryBrush}" CornerRadius="10" Padding="32,12" Cursor="Hand">
+                         <Button.Styles>
+                             <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background" Value="#155e75"/> <!-- Darker shade manually -->
+                             </Style>
+                        </Button.Styles>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                             <mi:MaterialIcon Kind="Check" Width="20" Height="20" Foreground="White" />
+                            <TextBlock Text="Odayı Kaydet" FontWeight="Bold" Foreground="White" FontSize="15" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+    </Grid>
+</UserControl>

@@ -1,0 +1,231 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:m="using:OtelV3.Models"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             xmlns:converters="using:OtelV3.Converters"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="OtelV3.Views.RoomsView"
+             x:DataType="vm:RoomsViewModel"
+             x:Name="Root"
+             Background="{DynamicResource PageBackground}">
+
+    <UserControl.Resources>
+        <converters:FilterColorConverter x:Key="FilterBgConverter"/>
+        <converters:FilterForegroundConverter x:Key="FilterFgConverter"/>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Border.statCard">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="16" />
+        </Style>
+        
+        <Style Selector="Button.filterBtn">
+            <Setter Property="Background" Value="{DynamicResource InputBackground}" />
+            <Setter Property="Foreground"  Value="{DynamicResource PrimaryText}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style Selector="Button.filterBtn:pointerover">
+             <Setter Property="Background" Value="{DynamicResource InputBackgroundPointerOver}" />
+        </Style>
+        <Style Selector="Button.filterBtn.active">
+            <Setter Property="Background" Value="{DynamicResource TextMainBrush}" /> <!-- Black -->
+            <Setter Property="Foreground" Value="White" />
+             <Setter Property="BorderThickness" Value="0" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1" Padding="24,16">
+            <Grid RowDefinitions="Auto, 24, Auto">
+                <!-- Title Row -->
+                <Grid ColumnDefinitions="*, Auto">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Oda Yönetimi" FontSize="30" FontWeight="Black" Foreground="{DynamicResource PrimaryText}" />
+                         <TextBlock Text="Otel envanterini, oda durumlarını ve fiyatlarını buradan yönetin." FontSize="16" Foreground="{DynamicResource SecondaryText}" />
+                    </StackPanel>
+                    
+                    <Button Grid.Column="1" Command="{Binding AddRoomCommand}" Background="{StaticResource PrimaryBrush}" CornerRadius="8" Padding="20,10" Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <mi:MaterialIcon Kind="Plus" Width="20" Height="20" Foreground="White" />
+                            <TextBlock Text="Yeni Oda Ekle" FontWeight="Bold" Foreground="White" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!-- Stats Grid (Using UniformGrid within ItemsControl for responsiveness simulation or just Grid) -->
+                <Grid Grid.Row="2" ColumnDefinitions="*, 16, *, 16, *, 16, *">
+                     <!-- Total Rooms -->
+                    <Border Grid.Column="0" Classes="statCard">
+                        <StackPanel Spacing="4">
+                             <TextBlock Text="TOPLAM ODA" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" LetterSpacing="1" />
+                             <TextBlock Text="{Binding TotalRoomsCount}" FontSize="24" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" />
+                        </StackPanel>
+                    </Border>
+                    
+                     <!-- Available -->
+                    <Border Grid.Column="2" Classes="statCard">
+                        <StackPanel Spacing="4">
+                             <TextBlock Text="MÜSAİT" FontSize="12" FontWeight="SemiBold" Foreground="#16a34a" LetterSpacing="1" />
+                             <TextBlock Text="{Binding AvailableRoomsCount}" FontSize="24" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" />
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Occupied -->
+                    <Border Grid.Column="4" Classes="statCard">
+                        <StackPanel Spacing="4">
+                             <TextBlock Text="DOLU" FontSize="12" FontWeight="SemiBold" Foreground="#dc2626" LetterSpacing="1" />
+                             <TextBlock Text="{Binding OccupiedRoomsCount}" FontSize="24" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" />
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Cleaning -->
+                    <Border Grid.Column="6" Classes="statCard">
+                        <StackPanel Spacing="4">
+                             <TextBlock Text="TEMİZLİK BEKLİYOR" FontSize="12" FontWeight="SemiBold" Foreground="#f97316" LetterSpacing="1" />
+                             <TextBlock Text="{Binding CleaningRoomsCount}" FontSize="24" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Content Area -->
+        <Border Grid.Row="1" Background="{DynamicResource PageBackground}" Padding="24">
+            <Grid RowDefinitions="Auto, 24, *">
+                
+                <!-- Toolbar -->
+                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                    <!-- Search -->
+                     <Grid Width="400" HorizontalAlignment="Left">
+                        <mi:MaterialIcon Kind="Search" Width="20" Height="20" Foreground="{DynamicResource SecondaryText}" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" ZIndex="1"/>
+                         <TextBox Text="{Binding SearchText}" Classes="modernInput" Watermark="Oda numarası veya misafir ara..." Padding="40,10,12,10" Background="{DynamicResource CardBackground}" CornerRadius="12" BorderThickness="0" />
+                    </Grid>
+                    
+                    <!-- Filters -->
+                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <Button Classes="filterBtn" Content="Tümü" Command="{Binding SetFilterCommand}" CommandParameter="Tümü"
+                                Background="{Binding SelectedFilter, Converter={StaticResource FilterBgConverter}, ConverterParameter='Tümü'}"
+                                Foreground="{Binding SelectedFilter, Converter={StaticResource FilterFgConverter}, ConverterParameter='Tümü'}"/>
+                        <Button Classes="filterBtn" Content="Tek Kişilik" Command="{Binding SetFilterCommand}" CommandParameter="Tek Kişilik"
+                                Background="{Binding SelectedFilter, Converter={StaticResource FilterBgConverter}, ConverterParameter='Tek Kişilik'}"
+                                Foreground="{Binding SelectedFilter, Converter={StaticResource FilterFgConverter}, ConverterParameter='Tek Kişilik'}"/>
+                        <Button Classes="filterBtn" Content="Çift Kişilik" Command="{Binding SetFilterCommand}" CommandParameter="Çift Kişilik"
+                                Background="{Binding SelectedFilter, Converter={StaticResource FilterBgConverter}, ConverterParameter='Çift Kişilik'}"
+                                Foreground="{Binding SelectedFilter, Converter={StaticResource FilterFgConverter}, ConverterParameter='Çift Kişilik'}"/>
+                        <Button Classes="filterBtn" Content="Süit" Command="{Binding SetFilterCommand}" CommandParameter="Süit"
+                                Background="{Binding SelectedFilter, Converter={StaticResource FilterBgConverter}, ConverterParameter='Süit'}"
+                                Foreground="{Binding SelectedFilter, Converter={StaticResource FilterFgConverter}, ConverterParameter='Süit'}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Room List -->
+                <ScrollViewer Grid.Row="2">
+                    <ItemsControl ItemsSource="{Binding AllRooms}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="m:RoomViewModel">
+                                <!-- Card Container with fixed width for grid-like feel -->
+                                <Border Width="350" Margin="0,0,24,24" Background="{DynamicResource CardBackground}" CornerRadius="12" BoxShadow="0 1 2 0 #0D000000" ClipToBounds="True">
+                                    <Grid>
+                                        <!-- Left Status Border -->
+                                        <Border HorizontalAlignment="Left" Width="6" Background="{Binding StatusColor}" />
+                                        
+                                        <!-- Content -->
+                                        <StackPanel Margin="26,20,20,20">
+                                            <!-- Header -->
+                                            <Grid ColumnDefinitions="*, Auto" Margin="0,0,0,16">
+                                                <StackPanel Spacing="4">
+                                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                                        <TextBlock Text="{Binding RoomNumber, StringFormat='Oda {0}'}" FontSize="20" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" />
+                                                        <Border Background="{Binding StatusBackground}" BorderBrush="{Binding StatusBorderBrush}" BorderThickness="1" CornerRadius="4" Padding="8,2">
+                                                            <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusForeground}" FontSize="10" FontWeight="Bold" />
+                                                        </Border>
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding RoomType}" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource SecondaryText}" />
+                                                </StackPanel>
+                                                
+                                                <Button Command="{Binding #Root.DataContext.EditRoomCommand}" 
+                                                        CommandParameter="{Binding}"
+                                                        x:CompileBindings="False"
+                                                        Background="Transparent" Padding="4" CornerRadius="8">
+                                                    <mi:MaterialIcon Kind="SquareEditOutline" Width="20" Height="20" Foreground="{DynamicResource SecondaryText}" />
+                                                </Button>
+                                            </Grid>
+                                            
+                                            <!-- Details Grid -->
+                                            <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,1">
+                                                <Grid ColumnDefinitions="Auto, 16, Auto, 16, Auto" Margin="0,16">
+                                                     <!-- Capacity -->
+                                                    <StackPanel Spacing="4">
+                                                        <TextBlock Text="KAPASİTE" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" />
+                                                        <TextBlock Text="{Binding Capacity}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" />
+                                                    </StackPanel>
+                                                    
+                                                    <!-- Features -->
+                                                    <StackPanel Grid.Column="2" Spacing="4" MaxWidth="120">
+                                                        <TextBlock Text="ÖZELLİK" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" />
+                                                        <TextBlock Text="{Binding Features}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" TextTrimming="CharacterEllipsis" />
+                                                    </StackPanel>
+                                                    
+                                                    <!-- Area -->
+                                                    <StackPanel Grid.Column="4" Spacing="4">
+                                                        <TextBlock Text="ALAN" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" />
+                                                        <TextBlock Text="{Binding Area}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                            
+                                            <!-- Footer -->
+                                            <Grid ColumnDefinitions="*, Auto" Margin="0,20,0,0">
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="GECELİK FİYAT" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" Margin="0,0,0,2"/>
+                                                    <TextBlock Text="{Binding Price, StringFormat='{}{0:N0} ₺'}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" />
+                                                </StackPanel>
+                                                
+                                                <Button Grid.Column="1" 
+                                                        Command="{Binding #Root.DataContext.RoomActionCommand}" 
+                                                        CommandParameter="{Binding}"
+                                                        x:CompileBindings="False"
+                                                        Content="{Binding ActionButtonText}"
+                                                        Background="{Binding ActionButtonBackground}"
+                                                        Foreground="{Binding ActionButtonForeground}"
+                                                        BorderThickness="0" 
+                                                        CornerRadius="8" 
+                                                        Padding="20,10" 
+                                                        FontWeight="Bold" 
+                                                        FontSize="13"
+                                                        Cursor="Hand"
+                                                        VerticalAlignment="Center" />
+                                            </Grid>
+                                            
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                
+            </Grid>
+        </Border>
+        
+    </Grid>
+</UserControl>

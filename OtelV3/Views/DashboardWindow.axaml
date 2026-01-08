@@ -1,0 +1,144 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:OtelV3.ViewModels"
+        xmlns:models="using:OtelV3.Models"
+        xmlns:mi="using:Material.Icons.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        x:Class="OtelV3.Views.DashboardWindow"
+        x:DataType="vm:DashboardViewModel"
+        x:Name="MainWindow"
+        Title="Otel Yönetim Paneli"
+        Width="1920" Height="1080"
+        MinWidth="1024" MinHeight="700"
+        Background="{DynamicResource PageBackground}"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    
+    <!-- Styles are now in App.axaml -->
+    
+    <Grid ColumnDefinitions="288,*">
+        
+        <!-- Sidebar -->
+        <Border Grid.Column="0" 
+                Background="{DynamicResource CardBackground}"
+                BorderBrush="{DynamicResource BorderColorLight}"
+                BorderThickness="0,0,1,0">
+            <Grid RowDefinitions="Auto,*,Auto">
+                
+                <!-- Logo & Title -->
+                <StackPanel Grid.Row="0" Margin="24,24,24,8">
+                    <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,0,0,32">
+                        <!-- Logo placeholder -->
+                        <Border Width="40" Height="40" CornerRadius="20" 
+                                Background="{StaticResource PrimaryBrush}"
+                                BoxShadow="0 1 3 0 #1a000000">
+                            <mi:MaterialIcon Kind="OfficeBuildingMarker" 
+                                            Foreground="White"
+                                            Width="24" Height="24" />
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="OtelPaneli" 
+                                       FontSize="18" FontWeight="Bold"
+                                       Foreground="{DynamicResource PrimaryText}" />
+                            <TextBlock Text="YÖNETİM SİSTEMİ" 
+                                       FontSize="10" FontWeight="Medium"
+                                       Foreground="{DynamicResource SecondaryText}"
+                                       LetterSpacing="2" />
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <!-- Navigation Menu -->
+                    <StackPanel Spacing="4">
+                        <ItemsControl ItemsSource="{Binding MenuItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding #MainWindow.((vm:DashboardViewModel)DataContext).SelectMenuItemCommand}"
+                                            CommandParameter="{Binding}"
+                                            Classes.menuItem="{Binding !IsSelected}"
+                                            Classes.menuItemSelected="{Binding IsSelected}">
+                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                            <mi:MaterialIcon Kind="{Binding Icon}" Width="20" Height="20" />
+                                            <TextBlock Text="{Binding Title}" FontSize="14" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+                
+                <!-- User Profile Section -->
+                <Border Grid.Row="2" 
+                        BorderBrush="{DynamicResource BorderColorLight}"
+                        BorderThickness="0,1,0,0"
+                        Padding="24,16">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <!-- Avatar -->
+                        <Border Width="40" Height="40" CornerRadius="20" 
+                                Background="{StaticResource SlateLightBrush}"
+                                ClipToBounds="True">
+                            <mi:MaterialIcon Kind="Account" 
+                                            Width="24" Height="24"
+                                            Foreground="{StaticResource SlateBrush}" />
+                        </Border>
+                        
+                        <!-- User Info -->
+                        <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding UserName}" 
+                                       FontSize="14" FontWeight="Bold"
+                                       Foreground="{DynamicResource PrimaryText}" />
+                            <TextBlock Text="{Binding UserRole}" 
+                                       FontSize="12"
+                                       Foreground="{DynamicResource SecondaryText}" />
+                        </StackPanel>
+                        
+                        <!-- Logout Button -->
+                        <Button Grid.Column="2" Classes="menuItem" 
+                                Padding="8" VerticalAlignment="Center"
+                                Command="{Binding LogoutCommand}">
+                            <mi:MaterialIcon Kind="Logout" Width="20" Height="20" 
+                                            Foreground="{DynamicResource SecondaryText}" />
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!-- Main Content Area -->
+        <Grid Grid.Column="1" RowDefinitions="80,*">
+            
+            <!-- Header (Global) -->
+            <Border Grid.Row="0" 
+                    Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource BorderColorLight}"
+                    BorderThickness="0,0,0,1">
+                <Grid Margin="32,0" ColumnDefinitions="*,Auto">
+                    <!-- Page Title (Dynamic based on logic, or just generic here? Let's keep title generic or bind to selected menu item title) -->
+                    <TextBlock Text="{Binding SelectedMenuItem.Title, FallbackValue='Anasayfa'}" 
+                               FontSize="20" FontWeight="Bold"
+                               Foreground="{DynamicResource PrimaryText}"
+                               VerticalAlignment="Center" />
+                    
+                    <!-- Header Actions -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                        <!-- Theme Toggle Button -->
+                        <Button Classes="iconBtn" Command="{Binding ToggleThemeCommand}" ToolTip.Tip="{Binding ThemeText}">
+                            <Border Background="{DynamicResource BorderLightBrush}" CornerRadius="20" Padding="8,6">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <mi:MaterialIcon Kind="{Binding ThemeIcon}" Width="20" Height="20" Foreground="{StaticResource PrimaryBrush}" />
+                                    <TextBlock Text="{Binding ThemeText}" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            
+            <!-- Dynamic Content -->
+            <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" />
+            
+        </Grid>
+    </Grid>
+</Window>

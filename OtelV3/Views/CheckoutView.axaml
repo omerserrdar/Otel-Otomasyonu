@@ -1,0 +1,296 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:models="using:OtelV3.Models"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             xmlns:converters="using:OtelV3.Converters"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+             x:Class="OtelV3.Views.CheckoutView"
+             x:DataType="vm:CheckoutViewModel"
+             Background="{DynamicResource InputBackground}">
+
+    <UserControl.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="4,0,0,0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundAlt}"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundAlt}"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+        
+        <!-- Filter Button Style -->
+        <Style Selector="Button.filterBtn">
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="99"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style Selector="Button.filterBtn:pointerover">
+            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+        <Style Selector="Button.filterBtn[Tag=Selected]">
+            <Setter Property="Background" Value="{DynamicResource TextMainBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource TextMainBrush}"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <UserControl.Resources>
+        <converters:FilterColorConverter x:Key="FilterBgConverter"/>
+        <converters:FilterForegroundConverter x:Key="FilterFgConverter"/>
+    </UserControl.Resources>
+
+    <Grid ColumnDefinitions="2*, 1.2*">
+        <!-- LEFT COLUMN: List & Search -->
+        <Grid Grid.Column="0" RowDefinitions="Auto, *">
+            
+            <!-- Search & Filters -->
+            <StackPanel Grid.Row="0" Margin="24,24,24,16" Spacing="16">
+                <Grid ColumnDefinitions="*, Auto">
+                    <!-- Search -->
+                   <Border Grid.Column="0" Background="{DynamicResource CardBackground}" CornerRadius="8" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" Height="42" MaxWidth="400" HorizontalAlignment="Left">
+                       <Grid ColumnDefinitions="Auto, *">
+                           <mi:MaterialIcon Grid.Column="0" Kind="Magnify" Width="20" Height="20" Foreground="{DynamicResource SecondaryText}" Margin="12,0"/>
+                           <TextBox Grid.Column="1" Text="{Binding SearchText}" Watermark="Oda no, misafir adı veya rezervasyon kodu..."
+                                    BorderThickness="0" Background="Transparent" VerticalAlignment="Center" FontSize="14"/>
+                       </Grid>
+                   </Border> 
+                   
+                   <!-- Filter Buttons -->
+                   <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                       <Button Classes="filterBtn" Content="Tümü" Command="{Binding SetFilterCommand}" CommandParameter="Tümü"
+                               Background="{Binding SelectedFilter, Converter={StaticResource FilterBgConverter}, ConverterParameter='Tümü'}"
+                               Foreground="{Binding SelectedFilter, Converter={StaticResource FilterFgConverter}, ConverterParameter='Tümü'}"/>
+                               
+                       <Button Classes="filterBtn" Content="Ödeme Bekleyen" Command="{Binding SetFilterCommand}" CommandParameter="Ödeme Bekleyen"
+                               Background="{Binding SelectedFilter, Converter={StaticResource FilterBgConverter}, ConverterParameter='Ödeme Bekleyen'}"
+                               Foreground="{Binding SelectedFilter, Converter={StaticResource FilterFgConverter}, ConverterParameter='Ödeme Bekleyen'}"/>
+                               
+                       <Button Classes="filterBtn" Content="Tamamlanan" Command="{Binding SetFilterCommand}" CommandParameter="Tamamlanan"
+                               Background="{Binding SelectedFilter, Converter={StaticResource FilterBgConverter}, ConverterParameter='Tamamlanan'}"
+                               Foreground="{Binding SelectedFilter, Converter={StaticResource FilterFgConverter}, ConverterParameter='Tamamlanan'}"/>
+                   </StackPanel>
+                </Grid>
+            </StackPanel>
+            
+            <!-- Data List -->
+            <Border Grid.Row="1" Margin="24,0,24,24" Background="{DynamicResource CardBackground}" CornerRadius="12" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" BoxShadow="0 1 2 0 #0D000000">
+                <Grid RowDefinitions="Auto, *">
+                     <!-- Header -->
+                    <Border Grid.Row="0" Background="{DynamicResource CardBackgroundAlt}" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource BorderColor}" Padding="0,16" CornerRadius="12,12,0,0">
+                        <Grid ColumnDefinitions="80, 2*, 1.5*, 1.2*, 1.2*, 60" Margin="4,0,0,0">
+                            <TextBlock Grid.Column="0" Text="ODA" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" Margin="24,0,0,0"/>
+                            <TextBlock Grid.Column="1" Text="MİSAFİR" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}"/>
+                            <TextBlock Grid.Column="2" Text="GİRİŞ/ÇIKIŞ" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}"/>
+                            <TextBlock Grid.Column="3" Text="BAKİYE" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" TextAlignment="Right"/>
+                            <TextBlock Grid.Column="4" Text="DURUM" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="5" />
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Content -->
+                    <ListBox Grid.Row="1" ItemsSource="{Binding CheckoutList}" SelectedItem="{Binding SelectedGuest}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:GuestCheckoutModel">
+                                <Grid ColumnDefinitions="80, 2*, 1.5*, 1.2*, 1.2*, 60" Margin="0,16">
+                                    <!-- Room -->
+                                    <TextBlock Grid.Column="0" Text="{Binding RoomNo}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryText}" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                    
+                                    <!-- Guest -->
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                        <Border Width="32" Height="32" CornerRadius="16" Background="{Binding AvatarBackground}">
+                                            <TextBlock Text="{Binding GuestInitials}" FontWeight="Bold" FontSize="11" Foreground="{Binding AvatarForeground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding GuestName}" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <!-- Dates -->
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding CheckInDisplay}" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                        <!-- Simple Conditional logic handled by changing color if needed, simplified here -->
+                                        <TextBlock Text="{Binding CheckOutDisplay}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource SecondaryText}"/> 
+                                    </StackPanel>
+                                    
+                                    <!-- Balance -->
+                                    <TextBlock Grid.Column="3" Text="{Binding Balance, StringFormat='{}{0:C}'}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryText}" TextAlignment="Right" VerticalAlignment="Center"/>
+                                    
+                                    <!-- Status -->
+                                    <Border Grid.Column="4" Background="{Binding StatusBackground}" CornerRadius="99" Padding="8,2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding StatusText}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding StatusForeground}"/>
+                                    </Border>
+                                    
+                                    <!-- Arrow -->
+                                    <Button Grid.Column="5" Background="Transparent" Padding="8" CornerRadius="20" HorizontalAlignment="Right" Margin="0,0,24,0">
+                                         <mi:MaterialIcon Kind="ChevronRight" Foreground="{DynamicResource SecondaryText}"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <!-- RIGHT COLUMN: Detail & Payment -->
+        <!-- Only show if guest selected -->
+        <Border Grid.Column="1" Margin="0,24,24,24" Background="{DynamicResource CardBackground}" CornerRadius="12" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" BoxShadow="0 4 6 -1 #1a000000" IsVisible="{Binding SelectedGuest, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <Grid RowDefinitions="Auto, *, Auto">
+                
+                <!-- Detail Header -->
+                <Border Grid.Row="0" Background="{DynamicResource CardBackgroundAlt}" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource BorderColorLight}" Padding="20" CornerRadius="12,12,0,0">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <StackPanel Grid.Column="0">
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,4">
+                                <Border Background="{StaticResource PrimaryBrush}" CornerRadius="4" Padding="6,2">
+                                    <TextBlock Text="{Binding SelectedGuest.RoomNo, StringFormat='Oda {0}'}" FontSize="11" FontWeight="Bold" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Standart Oda" FontSize="11" Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding SelectedGuest.GuestName}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="{Binding SelectedGuest.StayDuration, StringFormat='Giriş: {0} • {1} Gece'}" FontSize="12" Foreground="{DynamicResource SecondaryText}" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        
+                        <Button Grid.Column="1" Background="Transparent" Padding="8" CornerRadius="8">
+                            <mi:MaterialIcon Kind="DotsVertical" Foreground="{DynamicResource SecondaryText}"/>
+                        </Button>
+                    </Grid>
+                </Border>
+                
+                <!-- Scrollable Body -->
+                <ScrollViewer Grid.Row="1" Padding="20">
+                    <StackPanel Spacing="24">
+                        
+                        <!-- Invoice Summary -->
+                        <StackPanel Spacing="12">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock Text="Fatura Özeti" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                                <Button Grid.Column="1" Content="Detayları Gör" Background="Transparent" Padding="0" FontSize="12" Foreground="{StaticResource PrimaryBrush}" FontWeight="SemiBold"/>
+                            </Grid>
+                            
+                            <Border Background="{DynamicResource CardBackgroundAlt}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <StackPanel Spacing="8">
+                                    <ItemsControl ItemsSource="{Binding InvoiceItems}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ColumnDefinitions="*, Auto" Margin="0,0,0,8">
+                                                    <TextBlock Text="{Binding Description}" FontSize="13" Foreground="{DynamicResource SecondaryText}"/>
+                                                    <TextBlock Grid.Column="1" Text="{Binding Amount, StringFormat='{}{0:C}'}" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource PrimaryText}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    
+                                    <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,4"/>
+                                    
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <TextBlock Text="Yapılan Ödemeler" FontSize="13" Foreground="#059669"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding TotalPaidAmount, StringFormat='-{0:C}'}" FontSize="13" FontWeight="Medium" Foreground="#059669"/>
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,4,0,0">
+                                        <TextBlock Text="Kalan Bakiye" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding RemainingBalance, StringFormat='{}{0:C}'}" FontSize="20" FontWeight="UltraBlack" Foreground="{StaticResource PrimaryBrush}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        
+                        <!-- Extra Add -->
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Ekstra Harcama Ekle" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            <Grid ColumnDefinitions="*, 100, 48" ColumnSpan="2">
+                                <ComboBox Grid.Column="0" PlaceholderText="Hizmet Seç..." Margin="0,0,8,0" SelectedIndex="0">
+                                    <ComboBoxItem>Mini Bar</ComboBoxItem>
+                                    <ComboBoxItem>Transfer</ComboBoxItem>
+                                    <ComboBoxItem>Geç Çıkış</ComboBoxItem>
+                                </ComboBox>
+                                 <TextBox Grid.Column="1" Watermark="₺" Margin="0,0,8,0"/>
+                                 <Button Grid.Column="2" Background="{DynamicResource BorderLightBrush}" Foreground="{DynamicResource PrimaryText}" CornerRadius="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                     <mi:MaterialIcon Kind="Plus" Width="20" Height="20"/>
+                                 </Button>
+                            </Grid>
+                            
+                            <!-- Chips -->
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button Content="+ Su (₺20)" Command="{Binding AddQuickExtraCommand}" CommandParameter="Su"
+                                        Background="{DynamicResource CardBackgroundAlt}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" CornerRadius="6" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                <Button Content="+ Kahve (₺60)" Command="{Binding AddQuickExtraCommand}" CommandParameter="Kahve"
+                                        Background="{DynamicResource CardBackgroundAlt}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" CornerRadius="6" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                <Button Content="+ Snack (₺45)" Command="{Binding AddQuickExtraCommand}" CommandParameter="Snack"
+                                        Background="{DynamicResource CardBackgroundAlt}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" CornerRadius="6" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <!-- Payment Method -->
+                        <StackPanel Spacing="12">
+                             <TextBlock Text="Ödeme Yöntemi" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                             <Border Background="{DynamicResource BorderLightBrush}" CornerRadius="8" Padding="4">
+                                 <Grid ColumnDefinitions="*,*,*">
+                                     <RadioButton Grid.Column="0" GroupName="PaymentType" Content="Kredi Kartı" IsChecked="True" 
+                                                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{DynamicResource CardBackground}" CornerRadius="6"
+                                                  Theme="{StaticResource MaterialDesignRadioButton}"/>
+                                     <!-- Note: Standard radiogroup styling would require more templating to match HTML segment button perfectly, using simplified approach here or custom style if needed later. -->
+                                     <!-- For now assuming default radio, or simply buttons simulating selection -->
+                                 </Grid>
+                             </Border>
+                             
+                             <Border Background="{DynamicResource CardBackgroundAlt}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8" Padding="12">
+                                 <StackPanel>
+                                     <TextBlock Text="Tahsil Edilecek Tutar" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                     <Grid ColumnDefinitions="Auto, *">
+                                         <TextBlock Text="₺" FontSize="18" Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                         <TextBox Text="{Binding CollectionAmount}" FontSize="18" FontWeight="Bold" Background="Transparent" BorderThickness="0"/>
+                                     </Grid>
+                                 </StackPanel>
+                             </Border>
+                             
+                             <CheckBox Content="Ödeme sonrası e-fatura gönder" IsChecked="{Binding IsReceiptRequested}"/>
+                        </StackPanel>
+                        
+                    </StackPanel>
+                </ScrollViewer>
+                
+                <!-- Footer Actions -->
+                <Border Grid.Row="2" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="20" CornerRadius="0,0,12,12">
+                    <StackPanel Spacing="12">
+                         <Button Command="{Binding ProcessPaymentCommand}" Background="{StaticResource PrimaryBrush}" CornerRadius="12" Padding="0,12" HorizontalAlignment="Stretch">
+                             <StackPanel Orientation="Horizontal" Spacing="8">
+                                 <mi:MaterialIcon Kind="CreditCardCheck" Foreground="White"/>
+                                 <TextBlock Text="Ödemeyi Al ve Çıkışı Tamamla" FontWeight="Bold" Foreground="White" FontSize="14"/>
+                             </StackPanel>
+                         </Button>
+                         
+
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!-- Empty State (No selection) -->
+        <Border Grid.Column="1" Margin="0,24,24,24" Background="{DynamicResource CardBackground}" CornerRadius="12" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                IsVisible="{Binding SelectedGuest, Converter={x:Static ObjectConverters.IsNull}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
+                 <Border Background="{DynamicResource BorderLightBrush}" Width="80" Height="80" CornerRadius="40">
+                     <mi:MaterialIcon Kind="LoginVariant" Width="40" Height="40" Foreground="{DynamicResource SecondaryText}"/>
+                 </Border>
+                 <TextBlock Text="İşlem Yapmak İçin Bir Oda Seçin" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

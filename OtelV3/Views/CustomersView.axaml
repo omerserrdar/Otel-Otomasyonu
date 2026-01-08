@@ -1,0 +1,335 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:model="using:OtelV3.Models"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             xmlns:converters="using:OtelV3.Converters"
+             xmlns:asyncImage="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
+             x:Class="OtelV3.Views.CustomersView"
+             x:DataType="vm:CustomersViewModel"
+             x:Name="Root"
+             Background="{DynamicResource InputBackground}">
+
+    <UserControl.Resources>
+        <Color x:Key="PrimaryColor">#11b4d4</Color>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+        <SolidColorBrush x:Key="BackgroundLightBrush" Color="#f6f8f8"/>
+        <SolidColorBrush x:Key="SurfaceLightBrush" Color="{DynamicResource SurfaceMain}"/>
+        <SolidColorBrush x:Key="BorderLightBrush" Color="#dbe4e6"/>
+        <SolidColorBrush x:Key="TextMainBrush" Color="#111718"/>
+        <SolidColorBrush x:Key="TextSubBrush" Color="#618389"/>
+        <CornerRadius x:Key="RadiusLg">10</CornerRadius>
+        <converters:FilterColorConverter x:Key="FilterBgConverter"/>
+        <converters:FilterForegroundConverter x:Key="FilterFgConverter"/>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <!-- Global Input Styles per Request -->
+        <Style Selector="TextBox">
+            <Setter Property="MinHeight" Value="45"/>
+            <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        
+        <!-- Button Styles -->
+         <Style Selector="Button.action">
+            <Setter Property="MinHeight" Value="45"/>
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="CornerRadius" Value="{StaticResource RadiusLg}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+         <Style Selector="Button.action:pointerover /template/ ContentPresenter">
+             <Setter Property="Background" Value="{DynamicResource InputBackgroundPointerOver}"/>
+             <Setter Property="TextBlock.Foreground" Value="{StaticResource PrimaryBrush}"/>
+             <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+             <Setter Property="BorderThickness" Value="1"/>
+         </Style>
+
+         <!-- Filter Chip Button -->
+         <Style Selector="Button.chip">
+             <Setter Property="CornerRadius" Value="999"/>
+             <Setter Property="Padding" Value="16,6"/>
+             <Setter Property="FontSize" Value="14"/>
+             <Setter Property="FontWeight" Value="Medium"/>
+             <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+             <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+             <Setter Property="BorderThickness" Value="1"/>
+             <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+         </Style>
+         <Style Selector="Button.chip.active">
+             <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+             <Setter Property="Foreground" Value="White"/>
+         </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *"> <!-- Header (Sticky logic handled by grid), Scrollable Content -->
+        
+        <!-- Sticky Header matches HTML -->
+        <Border Grid.Row="0" Background="{DynamicResource PageBackground}" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="0,0,0,1" Padding="24,24">
+             <!-- Using backdrop-blur in Avalonia needs specific composition, keeping simple for now -->
+            <Grid ColumnDefinitions="*, Auto" MaxWidth="1400" HorizontalAlignment="Stretch">
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <TextBlock Text="Müşteri Yönetimi" FontSize="32" FontWeight="Black" Foreground="{DynamicResource PrimaryText}"/>
+                    <TextBlock Text="Tüm misafir kayıtlarını buradan görüntüleyip yönetebilirsiniz." FontSize="16" Foreground="{StaticResource TextSubBrush}"/>
+                </StackPanel>
+                
+                <Button Grid.Column="1" Command="{Binding AddCustomerCommand}" Background="{StaticResource PrimaryBrush}" Foreground="White" CornerRadius="8" Padding="20,10" VerticalAlignment="Center" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <mi:MaterialIcon Kind="Plus" Width="20" Height="20" Foreground="White"/>
+                        <TextBlock Text="Yeni Müşteri Ekle" FontWeight="Bold" FontSize="14"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1" RowDefinitions="Auto, Auto, *" Margin="24,0,24,40" MaxWidth="1400" HorizontalAlignment="Stretch">
+            
+            <!-- Toolbar (Search & Actions) -->
+            <Grid Grid.Row="0" ColumnDefinitions="*, 16, Auto" Margin="0,24,0,16">
+                <!-- Search -->
+                 <TextBox Grid.Column="0" Text="{Binding SearchText}" Watermark="İsim, soyisim veya telefon numarası ile ara..." Classes="search" MaxWidth="450" HorizontalAlignment="Left" Width="450">
+                    <TextBox.InnerLeftContent>
+                        <mi:MaterialIcon Kind="Search" Width="24" Height="24" Foreground="{StaticResource TextSubBrush}" Margin="12,0,0,0"/>
+                    </TextBox.InnerLeftContent>
+                </TextBox>
+                
+
+            </Grid>
+            
+            <!-- Filter Chips -->
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" Margin="0,0,0,24">
+                 <StackPanel Orientation="Horizontal" Spacing="8">
+                     
+                    <!-- Shared Style for Filter Chips -->
+                    <StackPanel.Styles>
+                        <Style Selector="Button.chip">
+                            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Style>
+                        <!-- Active State Style: We need a data trigger or binding. 
+                             Since we can't easily do DataTrigger in pure Avalonia without behaviors or specific setup for complex conditions in styles (sometimes),
+                             we can use Classes.Bind or stuck with Converter?
+                             
+                             Converter is problematic for DynamicResource.
+                             Best approach: ToggleButton or RadioButton?
+                             Or just bind Background directly but use a converter that returns a BRUSH RESOURCE KEY string?
+                             No, XAML is better.
+                             
+                             Let's use IValueConverter to return "True" or "False" content for Classes?
+                             Actually, easier solution: Use property trigger on a custom control or just direct binding to a Style with a Class.
+                             
+                             Let's try: Classes.active="{Binding SelectedFilter, Converter={StaticResource EqualityConverter}, ConverterParameter='Tümü'}"
+                        -->
+                        <Style Selector="Button.chip.active">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Style>
+                    </StackPanel.Styles>
+
+                    <Button Classes="chip" Content="Tümü" Command="{Binding SetFilterCommand}" CommandParameter="Tümü"
+                            Classes.active="{Binding SelectedFilter, Converter={x:Static converters:BooleanConverters.IsStringEqual}, ConverterParameter='Tümü'}"/>
+                            
+                    <!-- Custom Chip with Badge -->
+                    <Button Classes="chip" Command="{Binding SetFilterCommand}" CommandParameter="VIP Müşteriler"
+                            Classes.active="{Binding SelectedFilter, Converter={x:Static converters:BooleanConverters.IsStringEqual}, ConverterParameter='VIP Müşteriler'}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="VIP Müşteriler"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Classes="chip" Command="{Binding SetFilterCommand}" CommandParameter="Aktif Konaklayanlar"
+                            Classes.active="{Binding SelectedFilter, Converter={x:Static converters:BooleanConverters.IsStringEqual}, ConverterParameter='Aktif Konaklayanlar'}">
+                         <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="Aktif Konaklayanlar"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Classes="chip" Content="Kara Liste" Command="{Binding SetFilterCommand}" CommandParameter="Kara Liste"
+                            Classes.active="{Binding SelectedFilter, Converter={x:Static converters:BooleanConverters.IsStringEqual}, ConverterParameter='Kara Liste'}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Data Table (ListBox) -->
+            <Border Grid.Row="2" Background="{DynamicResource CardBackground}" CornerRadius="12" BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="1" ClipToBounds="True">
+                <Grid RowDefinitions="Auto, *, Auto"> 
+                    
+                    <!-- Table Header -->
+                    <Grid Grid.Row="0" Background="{DynamicResource CardBackgroundAlt}" ColumnDefinitions="2*, 1.5*, 1.2*, 1.5*, 1.2*, 80">
+                         <!-- Mimic CSS uppercase tracking-wider font-semibold text-xs -->
+                         <TextBlock Grid.Column="0" Text="MÜŞTERİ BİLGİSİ" Foreground="{StaticResource TextSubBrush}" FontSize="12" FontWeight="SemiBold" Padding="24,16"/>
+                         <TextBlock Grid.Column="1" Text="İLETİŞİM" Foreground="{StaticResource TextSubBrush}" FontSize="12" FontWeight="SemiBold" Padding="24,16"/>
+                         <TextBlock Grid.Column="2" Text="KİMLİK NO" Foreground="{StaticResource TextSubBrush}" FontSize="12" FontWeight="SemiBold" Padding="24,16"/>
+                         <TextBlock Grid.Column="3" Text="SON REZERVASYON" Foreground="{StaticResource TextSubBrush}" FontSize="12" FontWeight="SemiBold" Padding="24,16"/>
+                         <TextBlock Grid.Column="4" Text="GEÇMİŞ" Foreground="{StaticResource TextSubBrush}" FontSize="12" FontWeight="SemiBold" Padding="24,16"/>
+                         <TextBlock Grid.Column="5" Text="İŞLEMLER" Foreground="{StaticResource TextSubBrush}" FontSize="12" FontWeight="SemiBold" Padding="24,16" TextAlignment="Right"/>
+                    </Grid>
+
+                    <!-- Table Rows -->
+                    <ListBox Grid.Row="1" ItemsSource="{Binding Customers}" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                         <ListBox.Styles>
+                            <!-- Remove default selection styles -->
+                            <Style Selector="ListBoxItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                             <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                                 <Setter Property="Background" Value="{DynamicResource CardBackgroundAlt}"/>
+                             </Style>
+                        </ListBox.Styles>
+                        
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="model:CustomerModel">
+                                <!-- Row Container with logic for Blacklist bg -->
+                                <Border BorderBrush="{DynamicResource BorderColorLight}" BorderThickness="0,0,0,1" Padding="0">
+                                    <Border.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="VIP Yap" Command="{Binding #Root.((vm:CustomersViewModel)DataContext).ToggleVipCommand}" CommandParameter="{Binding .}" IsVisible="{Binding !IsVip}">
+                                                <MenuItem.Icon>
+                                                    <mi:MaterialIcon Kind="StarOutline" Foreground="{StaticResource PrimaryBrush}"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="VIP Kaldır" Command="{Binding #Root.((vm:CustomersViewModel)DataContext).ToggleVipCommand}" CommandParameter="{Binding .}" IsVisible="{Binding IsVip}">
+                                                <MenuItem.Icon>
+                                                    <mi:MaterialIcon Kind="StarOff" Foreground="{StaticResource MutedText}"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <Separator/>
+                                            <MenuItem Header="Kara Listeye Al" Command="{Binding #Root.((vm:CustomersViewModel)DataContext).ToggleBlacklistCommand}" CommandParameter="{Binding .}" IsVisible="{Binding !IsBlacklisted}">
+                                                <MenuItem.Icon>
+                                                    <mi:MaterialIcon Kind="Cancel" Foreground="#ef4444"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="Kara Listeden Çıkar" Command="{Binding #Root.((vm:CustomersViewModel)DataContext).ToggleBlacklistCommand}" CommandParameter="{Binding .}" IsVisible="{Binding IsBlacklisted}">
+                                                <MenuItem.Icon>
+                                                    <mi:MaterialIcon Kind="CheckCircle" Foreground="#22c55e"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
+                                     <!-- Blacklist Background Logic via Class or direct Brush binding if possible. 
+                                          We can use classes bound to boolean but straightforward approach: Panel background -->
+                                    <Panel>
+                                        <!-- Error styling trick or converter for background. 
+                                             Simulating Blacklist Red BG manually if IsBlacklisted is true -->
+                                        <Border IsVisible="{Binding IsBlacklisted}" Background="{DynamicResource CardBackgroundAlt}" Opacity="1"/>
+                                        
+                                        <!-- Content matching Grid definitions of Header exactly -->
+                                        <Grid ColumnDefinitions="2*, 1.5*, 1.2*, 1.5*, 1.2*, 80" Background="Transparent">
+                                            
+                                            <!-- Col 1: Customer Info -->
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" Margin="24,16">
+                                                <!-- Avatar / Initials -->
+                                                <Panel Width="40" Height="40">
+                                                    <!-- Initials (Blue Circle) -->
+                                                    <Border IsVisible="{Binding !HasAvatar}" CornerRadius="20" Background="{Binding IsBlacklisted, Converter={x:Static ObjectConverters.IsNull}}" > <!-- Fallback color logic needed, hardcoding blue/red based on HTML -->
+                                                        <!-- Simplified: Default Blue, Red if Blacklisted handled manually? 
+                                                             Let's stick to standard Blue for normal, Red for blacklisted in HTML.
+                                                             Implementing simple triggers is hard in strict XAML without styles. 
+                                                             Let's use a default Blue style. -->
+                                                        <Border.Styles>
+                                                            <Style Selector="Border">
+                                                                <Setter Property="Background" Value="#dbeafe"/> <!-- Blue-100 -->
+                                                            </Style>
+                                                            <!-- If blacklisted, override color -->
+                                                            <Style Selector="Border[Tag=True]"> <!-- Using Tag hack or DataContext binding -->
+                                                                <Setter Property="Background" Value="#fee2e2"/> <!-- Red-100 -->
+                                                            </Style>
+                                                        </Border.Styles>
+                                                        <!-- Binding Tag for simple style trigger -->
+                                                        <Border.Tag>
+                                                            <Binding Path="IsBlacklisted"/>
+                                                        </Border.Tag>
+                                                        
+                                                        <TextBlock Text="{Binding Initials}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Foreground="#2563eb"/> 
+                                                    </Border>
+                                                    
+                                                    <!-- Image Avatar -->
+                                                    <Border IsVisible="{Binding HasAvatar}" CornerRadius="20" ClipToBounds="True">
+                                                        <asyncImage:AdvancedImage Source="{Binding AvatarUrl}" Stretch="UniformToFill"/>
+                                                    </Border>
+                                                </Panel>
+                                                
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" FontSize="14"/>
+                                                    <!-- VIP Badge -->
+                                                    <Border IsVisible="{Binding IsVip}" Background="#fef9c3" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" Margin="0,4,0,0">
+                                                        <TextBlock Text="VIP" FontSize="10" FontWeight="Bold" Foreground="#854d0e"/>
+                                                    </Border>
+                                                     <!-- Blacklist Badge -->
+                                                    <Border IsVisible="{Binding IsBlacklisted}" Background="#fee2e2" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" Margin="0,4,0,0">
+                                                        <TextBlock Text="KARA LİSTE" FontSize="10" FontWeight="Bold" Foreground="#991b1b"/>
+                                                    </Border>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            
+                                            <!-- Col 2: Contact -->
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4" Margin="24,16">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <mi:MaterialIcon Kind="Phone" Width="16" Height="16" Foreground="{StaticResource TextSubBrush}"/>
+                                                    <TextBlock Text="{Binding Phone}" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource PrimaryText}"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <mi:MaterialIcon Kind="Email" Width="16" Height="16" Foreground="{StaticResource TextSubBrush}"/>
+                                                    <TextBlock Text="{Binding Email}" FontSize="12" Foreground="{StaticResource TextSubBrush}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            
+                                            <!-- Col 3: Identity -->
+                                            <TextBlock Grid.Column="2" Text="{Binding IdentityNumber}" VerticalAlignment="Center" FontFamily="Consolas, Monospace" FontSize="14" Foreground="{StaticResource TextSubBrush}" Padding="24,16"/>
+                                            
+                                            <!-- Col 4: Last Vist -->
+                                            <StackPanel Grid.Column="3" VerticalAlignment="Center" Spacing="2" Margin="24,16">
+                                                <TextBlock Text="{Binding LastVisitDate, StringFormat='d', TargetNullValue='-'}" FontSize="14" Foreground="{DynamicResource PrimaryText}"/>
+                                                <TextBlock Text="{Binding LastVisitStatus}" FontSize="12" Foreground="{StaticResource TextSubBrush}"/> <!-- Could color green if 'active' -->
+                                            </StackPanel>
+                                            
+                                            <!-- Col 5: History Badge -->
+                                            <StackPanel Grid.Column="4" VerticalAlignment="Center" Margin="24,16" HorizontalAlignment="Left">
+                                                <Border Background="{DynamicResource CardBackgroundAlt}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="6" Padding="8,4"> <!-- Light blue style matching HTML -->
+                                                    <TextBlock Text="{Binding VisitCount, StringFormat='{}{0} Konaklama'}" FontSize="12" FontWeight="Bold" Foreground="#0284c7"/>
+                                                </Border>
+                                            </StackPanel>
+                                            
+                                            <!-- Col 6: Actions -->
+                                            <Button Grid.Column="5" Background="Transparent" Width="32" Height="32" CornerRadius="6" Padding="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,24,0">
+                                                <mi:MaterialIcon Kind="DotsVertical" Foreground="{StaticResource TextSubBrush}"/>
+                                            </Button>
+                                            
+                                        </Grid>
+                                    </Panel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    
+                    <!-- Footer Pagination - Simplified -->
+                     <Border Grid.Row="2" Padding="24,16" Background="{DynamicResource CardBackground}">
+                         <Grid ColumnDefinitions="*, Auto">
+                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                 <TextBlock Text="Toplam " Foreground="{StaticResource TextSubBrush}" FontSize="14"/>
+                                 <TextBlock Text="{Binding Customers.Count}" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" FontSize="14"/>
+                                 <TextBlock Text=" kayıt listeleniyor" Foreground="{StaticResource TextSubBrush}" FontSize="14"/>
+                             </StackPanel>
+                         </Grid>
+                     </Border>
+                </Grid>
+            </Border>
+            
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,356 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:converters="using:OtelV3.Converters"
+             mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="1024"
+             x:Class="OtelV3.Views.FinanceView"
+             x:DataType="vm:FinanceViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BoxShadow" Value="0 1 2 0 #0D000000"/>
+        </Style>
+    </UserControl.Styles>
+
+
+    <ScrollViewer>
+        <StackPanel Spacing="32" Margin="32">
+            
+            <!-- Header -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="Finansal Yönetim ve Analiz" FontSize="32" FontWeight="Black" Foreground="{DynamicResource PrimaryText}"/>
+                <TextBlock Text="Yapay zeka destekli finansal öngörüler ve raporlar" FontSize="16" Foreground="{DynamicResource MutedText}"/>
+            </StackPanel>
+            
+            <!-- KPI Cards -->
+            <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="Auto" Margin="0,0,0,0">
+                <Grid.Styles>
+                    <Style Selector="Border.kpi">
+                        <Setter Property="Padding" Value="24"/>
+                        <Setter Property="Margin" Value="0,0,16,0"/>
+                        <Setter Property="Height" Value="140"/>
+                    </Style>
+                </Grid.Styles>
+
+                <!-- Revenue -->
+                <Border Grid.Column="0" Classes="card kpi">
+                    <Grid>
+                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Opacity="0.1">
+                             <mi:MaterialIcon Kind="Cash" Width="64" Height="64" Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Bottom" Spacing="4">
+                            <TextBlock Text="Toplam Gelir" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource MutedText}"/>
+                            <TextBlock Text="{Binding TotalRevenue}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Border Background="#dcfce7" CornerRadius="99" Width="20" Height="20">
+                                    <mi:MaterialIcon Kind="TrendingUp" Width="14" Height="14" Foreground="#15803d"/>
+                                </Border>
+                                <TextBlock Text="+12%" FontSize="14" FontWeight="Bold" Foreground="#15803d"/>
+                                <TextBlock Text="geçen aya göre" FontSize="12" Foreground="{DynamicResource MutedText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Expense -->
+                <Border Grid.Column="1" Classes="card kpi">
+                    <Grid>
+                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Opacity="0.1">
+                             <mi:MaterialIcon Kind="TrendingDown" Width="64" Height="64" Foreground="#ef4444"/>
+                        </StackPanel>
+                         <StackPanel VerticalAlignment="Bottom" Spacing="4">
+                            <TextBlock Text="Toplam Gider" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource MutedText}"/>
+                            <TextBlock Text="{Binding TotalExpense}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                             <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Border Background="#20ef4444" CornerRadius="99" Width="20" Height="20">
+                                    <mi:MaterialIcon Kind="TrendingUp" Width="14" Height="14" Foreground="#ef4444"/>
+                                </Border>
+                                <TextBlock Text="+5%" FontSize="14" FontWeight="Bold" Foreground="#ef4444"/>
+                                <TextBlock Text="geçen aya göre" FontSize="12" Foreground="{DynamicResource MutedText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                
+                <!-- Profit -->
+                <Border Grid.Column="2" Classes="card kpi">
+                    <Grid>
+                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Opacity="0.1">
+                             <mi:MaterialIcon Kind="Wallet" Width="64" Height="64" Foreground="#3b82f6"/>
+                        </StackPanel>
+                         <StackPanel VerticalAlignment="Bottom" Spacing="4">
+                            <TextBlock Text="Net Kâr" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource MutedText}"/>
+                            <TextBlock Text="{Binding NetProfit}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                             <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Border Background="#203b82f6" CornerRadius="99" Width="20" Height="20">
+                                    <mi:MaterialIcon Kind="TrendingUp" Width="14" Height="14" Foreground="#3b82f6"/>
+                                </Border>
+                                <TextBlock Text="+15%" FontSize="14" FontWeight="Bold" Foreground="#3b82f6"/>
+                                <TextBlock Text="geçen aya göre" FontSize="12" Foreground="{DynamicResource MutedText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- AI Score (Gradient) -->
+                <Border Grid.Column="3" Classes="card kpi" Margin="0" BorderThickness="1" BorderBrush="#1e293b">
+                    <Border.Background>
+                         <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Offset="0" Color="#111827"/>
+                            <GradientStop Offset="1" Color="#1f2937"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                     <Grid>
+                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Opacity="0.2">
+                             <mi:MaterialIcon Kind="Brain" Width="64" Height="64" Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+                         <StackPanel VerticalAlignment="Bottom" Spacing="4">
+                             <StackPanel Orientation="Horizontal" Spacing="6">
+                                  <mi:MaterialIcon Kind="Star" Width="16" Height="16" Foreground="{StaticResource PrimaryBrush}"/>
+                                  <TextBlock Text="Yapay Zeka Güven Skoru" FontSize="13" FontWeight="Medium" Foreground="#d1d5db"/>
+                             </StackPanel>
+                            
+                            <TextBlock Text="{Binding AiScore, StringFormat='{}{0}%'}" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                             <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="Mükemmel" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}"/>
+                                <TextBlock Text="Finansal veriler tutarlı" FontSize="12" Foreground="#9ca3af"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Forecast and Insights -->
+            <Grid ColumnDefinitions="2*, 16, *" RowDefinitions="Auto">
+                
+                <!-- Chart Container -->
+                <Border Grid.Column="0" Classes="card" Padding="24">
+                   <Grid RowDefinitions="Auto, *">
+                       <TextBlock Grid.Row="0" Margin="0,0,0,24">
+                           <TextBlock Text="Haftalık Gelir Tahmini" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                       </TextBlock>
+                       <StackPanel Grid.Row="0" Margin="0,24,0,24">
+                           <TextBlock Text="Son 7 gün + Gelecek 7 gün AI tahmini" FontSize="14" Foreground="{DynamicResource MutedText}" Margin="0,4,0,0"/>
+                           
+                           <StackPanel Orientation="Horizontal" Margin="0,16,0,0" Spacing="16">
+                               <StackPanel Orientation="Horizontal" Spacing="6">
+                                   <Border Width="12" Height="12" CornerRadius="99" Background="{StaticResource PrimaryBrush}"/>
+                                   <TextBlock Text="AI Tahmin" FontSize="12" Foreground="{DynamicResource MutedText}"/>
+                               </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                   <Border Width="12" Height="12" CornerRadius="99" Background="#d1d5db"/>
+                                   <TextBlock Text="Geçmiş" FontSize="12" Foreground="{DynamicResource MutedText}"/>
+                               </StackPanel>
+                           </StackPanel>
+                       </StackPanel>
+
+                       <!-- Custom Bar Chart (ItemsControl inside a uniform grid approximation) -->
+                       <ItemsControl Grid.Row="1" ItemsSource="{Binding ForecastData}" Height="250" VerticalAlignment="Bottom">
+                           <ItemsControl.ItemsPanel>
+                               <ItemsPanelTemplate>
+                                   <UniformGrid Rows="1"/> <!-- Distribute bars evenly -->
+                               </ItemsPanelTemplate>
+                           </ItemsControl.ItemsPanel>
+                           <ItemsControl.ItemTemplate>
+                               <DataTemplate>
+                                   <Grid RowDefinitions="*, Auto" Margin="8,0">
+                                       <!-- Bar Area -->
+                                       <Grid Grid.Row="0" VerticalAlignment="Bottom">
+                                            <!-- Background/Prev Value Bar -->
+                                           <Border Background="{DynamicResource BorderBrush}" CornerRadius="8,8,0,0" VerticalAlignment="Bottom" Width="24" Height="{Binding PrevBarHeight}"/>
+                                           
+                                           <!-- Current/Forecast Value Bar -->
+                                           <Border VerticalAlignment="Bottom" Width="24" CornerRadius="8,8,0,0" Height="{Binding BarHeight}" Margin="10,0,0,0">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="{Binding IsForecast, Converter={x:Static converters:BooleanConverters.IfTrueThen08Else1}}"/>
+                                                </Border.Background>
+                                           </Border>
+                                       </Grid>
+                                       
+                                       <!-- Period Label -->
+                                       <TextBlock Grid.Row="1" Text="{Binding Period}" FontSize="12" Foreground="{Binding IsForecast, Converter={x:Static converters:BooleanConverters.IfTrueThenPrimaryElseMuted}}" FontWeight="{Binding IsForecast, Converter={x:Static converters:BooleanConverters.IfTrueThenBoldElseNormal}}" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                   </Grid>
+                               </DataTemplate>
+                           </ItemsControl.ItemTemplate>
+                       </ItemsControl>
+                   </Grid>
+                </Border>
+                
+                <!-- Insights List -->
+                <Border Grid.Column="2" Classes="card" Padding="20">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Öneriler ve Uyarılar" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                        
+                        <ItemsControl ItemsSource="{Binding AiInsights}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="vm:AiInsight">
+                                    <Border CornerRadius="8" Padding="16" Margin="0,0,0,12" Background="{DynamicResource CardBackgroundAlt}">
+                                    
+                                        <Grid ColumnDefinitions="Auto, *">
+                                            <mi:MaterialIcon Grid.Column="0" Kind="{Binding Icon}" Width="24" Height="24" Margin="0,0,12,0" VerticalAlignment="Top"/> 
+                                            <!-- Color binding for Icon needed -->
+                                            
+                                            <StackPanel Grid.Column="1" Spacing="4">
+                                                <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="14"/>
+                                                <TextBlock Text="{Binding Description}" FontSize="12" Foreground="{DynamicResource MutedText}" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            
+            <!-- Details Grid -->
+            <Grid ColumnDefinitions="*, 16, *" RowDefinitions="Auto">
+                <!-- Revenue Breakdown -->
+                <Border Grid.Column="0" Classes="card" Padding="24">
+                    <StackPanel Spacing="20">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Gelir Dağılımı" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            <TextBlock Text="Kategori bazlı gelir analizi" FontSize="13" Foreground="{DynamicResource MutedText}"/>
+                        </StackPanel>
+                        
+                        <ItemsControl ItemsSource="{Binding RevenueDistribution}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,16" Padding="12" Background="{DynamicResource CardBackgroundAlt}" CornerRadius="8">
+                                        <Grid RowDefinitions="Auto, 8, Auto">
+                                            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                                                <TextBlock Grid.Column="0" Text="{Binding Category}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding PercentageText}" FontSize="16" FontWeight="Bold" Foreground="{Binding BarBrush}"/>
+                                            </Grid>
+                                            
+                                            <Grid Grid.Row="2" Height="12">
+                                                <Border Background="{DynamicResource BorderBrush}" CornerRadius="6"/>
+                                                <Border CornerRadius="6" HorizontalAlignment="Left" Width="{Binding BarWidth}" Background="{Binding BarBrush}"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Budget Tracking -->
+                <Border Grid.Column="2" Classes="card" Padding="24">
+                    <StackPanel Spacing="16">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Grid.Column="0" Text="Bütçe Takibi (AI Önerileri)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            <Button Grid.Column="1" Classes="text" Content="Detaylar" Foreground="{StaticResource PrimaryBrush}" Padding="0"/>
+                        </Grid>
+                        
+                        <ItemsControl ItemsSource="{Binding BudgetItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,12" Padding="12" Background="{DynamicResource CardBackgroundAlt}" CornerRadius="8">
+                                        <StackPanel Spacing="8">
+                                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                                <mi:MaterialIcon Grid.Column="0" Kind="{Binding Icon}" Width="20" Height="20" Foreground="{StaticResource PrimaryBrush}" Margin="0,0,8,0"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Category}" FontWeight="Bold" FontSize="14"/>
+                                                <TextBlock Grid.Column="2" FontSize="12" Foreground="#22c55e" FontWeight="Medium">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}₺{0:N0} tasarruf">
+                                                            <Binding Path="SavingAmount"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </Grid>
+                                            
+                                            <Grid ColumnDefinitions="*, Auto">
+                                                <StackPanel Grid.Column="0" Spacing="4">
+                                                    <TextBlock Text="{Binding SavingTip}" FontSize="12" Foreground="{DynamicResource MutedText}" TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            
+                                            <!-- Progress Bar -->
+                                            <Grid Height="6">
+                                                <Border Background="{DynamicResource BorderBrush}" CornerRadius="3"/>
+                                                <Border Background="{StaticResource PrimaryBrush}" CornerRadius="3" HorizontalAlignment="Left">
+                                                    <Border.Width>
+                                                        <MultiBinding Converter="{x:Static converters:MathConverters.Multiply}">
+                                                            <Binding Path="ProgressPercent"/>
+                                                            <Binding Source="2.0"/>
+                                                        </MultiBinding>
+                                                    </Border.Width>
+                                                </Border>
+                                            </Grid>
+                                            
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" FontSize="11" Foreground="{DynamicResource MutedText}">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}Mevcut: ₺{0:N0}">
+                                                            <Binding Path="CurrentAmount"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                                <TextBlock Grid.Column="1" FontSize="11" Foreground="#22c55e" HorizontalAlignment="Right">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}Hedef: ₺{0:N0}">
+                                                            <Binding Path="SuggestedAmount"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            
+            <!-- Transactions Table -->
+            <Border Classes="card" Padding="0">
+                <StackPanel>
+                    <Grid ColumnDefinitions="*, Auto" Margin="24">
+                        <TextBlock Grid.Column="0" Text="Son Finansal Hareketler" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                            <TextBox Watermark="İşlem Ara..." Width="200" Classes="search"/>
+                            <Button Classes="icon">
+                                <mi:MaterialIcon Kind="FilterList"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <ListBox ItemsSource="{Binding Transactions}" Background="Transparent" Margin="0,0,0,12">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="0"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                         <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1" Padding="24,16">
+                                    <Grid ColumnDefinitions="150, 2*, *, *, 150">
+                                        <TextBlock Grid.Column="0" Text="{Binding Date}" FontSize="14" Foreground="{DynamicResource PrimaryText}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Description}" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource PrimaryText}"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding Category}" FontSize="14" Foreground="{DynamicResource MutedText}"/>
+                                        <Border Grid.Column="3" HorizontalAlignment="Left" Background="{DynamicResource CardBackgroundAlt}" CornerRadius="99" Padding="12,4">
+                                            <TextBlock Text="{Binding Status}" FontSize="12" FontWeight="Medium" Foreground="#15803d"/>
+                                        </Border>
+                                        <TextBlock Grid.Column="4" Text="{Binding FormattedAmount}" FontSize="14" FontWeight="Bold" HorizontalAlignment="Right" Foreground="{Binding IsPositive, Converter={x:Static converters:BooleanConverters.IfTrueThenGreenElseBlack}}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    
+                    <Button Classes="text" Content="Tüm İşlemleri Görüntüle" HorizontalAlignment="Center" Margin="0,0,0,24" Foreground="{StaticResource PrimaryBrush}"/>
+                </StackPanel>
+            </Border>
+            
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

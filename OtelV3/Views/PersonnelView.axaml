@@ -1,0 +1,235 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:models="using:OtelV3.Models"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             xmlns:asyncImage="using:AsyncImageLoader"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="OtelV3.Views.PersonnelView"
+             x:DataType="vm:PersonnelViewModel"
+             Background="{DynamicResource InputBackground}">
+
+    <UserControl.Styles>
+        <!-- Filter Chip Style (Simulating a Button/ComboBox Chip) -->
+        <Style Selector="Button.filterChip">
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.filterChip:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource InputBackgroundPointerOver}"/>
+        </Style>
+
+        <!-- ListBox Items Style -->
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style> 
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundAlt}"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundAlt}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Top Header Breadcrumbs & Actions -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1" Padding="32,20">
+            <Grid ColumnDefinitions="*, Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Ana Sayfa" Foreground="{DynamicResource SecondaryText}" FontSize="14" />
+                    <mi:MaterialIcon Kind="ChevronRight" Foreground="{DynamicResource SecondaryText}" Width="16" Height="16" />
+                    <TextBlock Text="İnsan Kaynakları" Foreground="{DynamicResource SecondaryText}" FontSize="14" />
+                    <mi:MaterialIcon Kind="ChevronRight" Foreground="{DynamicResource SecondaryText}" Width="16" Height="16" />
+                    <TextBlock Text="Personel Yönetimi" Foreground="{DynamicResource PrimaryText}" FontWeight="SemiBold" FontSize="14" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16">
+                     <Button Classes="iconBtn">
+                         <Panel>
+                             <mi:MaterialIcon Kind="Bell" Width="22" Height="22" />
+                             <!-- Notification Badge -->
+                             <Border Width="10" Height="10" CornerRadius="5" Background="#ef4444" BorderBrush="White" BorderThickness="2" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
+                         </Panel>
+                     </Button>
+                     <Button Classes="iconBtn">
+                         <mi:MaterialIcon Kind="HelpCircleOutline" Width="22" Height="22" />
+                     </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <ScrollViewer Grid.Row="1" Padding="32">
+            <StackPanel Spacing="24" MaxWidth="1400" HorizontalAlignment="Stretch">
+                
+                <!-- Page Header & Action -->
+                <Grid ColumnDefinitions="*, Auto">
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Text="Personel Listesi" FontSize="28" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" LetterSpacing="-0.5"/>
+                        <TextBlock Text="Otel personelini görüntüleyin, filtreleyin ve yönetin." FontSize="16" Foreground="{DynamicResource SecondaryText}"/>
+                    </StackPanel>
+                    
+                    <Button Grid.Column="1" Command="{Binding AddNewPersonnelCommand}" Background="{StaticResource PrimaryBrush}" CornerRadius="8" Padding="20,10" Cursor="Hand" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <mi:MaterialIcon Kind="Plus" Width="20" Height="20" Foreground="White"/>
+                            <TextBlock Text="Yeni Personel Ekle" FontWeight="Bold" Foreground="White" FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!-- Filters Toolbar -->
+                <Border Background="{DynamicResource CardBackground}" CornerRadius="12" BorderThickness="1" BorderBrush="{DynamicResource BorderColor}" Padding="16" BoxShadow="0 1 2 0 #0D000000">
+                    <Grid ColumnDefinitions="400, *, Auto">
+                        <!-- Search Box -->
+                        <Border Grid.Column="0" Background="{DynamicResource InputBackground}" CornerRadius="8" Height="44">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <mi:MaterialIcon Grid.Column="0" Kind="Magnify" Width="20" Height="20" Foreground="{DynamicResource SecondaryText}" Margin="12,0"/>
+                                <TextBox Grid.Column="1" Text="{Binding SearchText}" Watermark="İsim, T.C. No veya Pozisyon ile ara..." 
+                                         Background="Transparent" BorderThickness="0" VerticalAlignment="Center" FontSize="14"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Filters -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12">
+                            <Button Classes="filterChip">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <mi:MaterialIcon Kind="Domain" Foreground="{DynamicResource SecondaryText}" Width="18" Height="18"/>
+                                    <TextBlock Text="Departman: Tümü" />
+                                    <mi:MaterialIcon Kind="ChevronDown" Foreground="{DynamicResource SecondaryText}" Width="18" Height="18"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="filterChip">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <mi:MaterialIcon Kind="ToggleSwitch" Foreground="{DynamicResource SecondaryText}" Width="18" Height="18"/>
+                                    <TextBlock Text="Durum: Aktif" />
+                                    <mi:MaterialIcon Kind="ChevronDown" Foreground="{DynamicResource SecondaryText}" Width="18" Height="18"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Classes="filterChip">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <mi:MaterialIcon Kind="Sort" Foreground="{DynamicResource SecondaryText}" Width="18" Height="18"/>
+                                    <TextBlock Text="Sıralama: Son Eklenen" />
+                                    <mi:MaterialIcon Kind="ChevronDown" Foreground="{DynamicResource SecondaryText}" Width="18" Height="18"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Data Table (Simulated with ListBox) -->
+                <Border Background="{DynamicResource CardBackground}" CornerRadius="12" BorderThickness="1" BorderBrush="{DynamicResource BorderColor}" BoxShadow="0 1 2 0 #0D000000" ClipToBounds="True">
+                    <Grid RowDefinitions="Auto, *">
+                        <!-- Table Header -->
+                        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundAlt}" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource BorderColor}" Padding="24,16">
+                            <Grid ColumnDefinitions="2*, 2*, 2*, 1.5*, 1.5*, 1.5*, 100">
+                                <TextBlock Grid.Column="0" Text="PERSONEL" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" />
+                                <TextBlock Grid.Column="1" Text="POZİSYON / DEPARTMAN" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" />
+                                <TextBlock Grid.Column="2" Text="İLETİŞİM" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" />
+                                <TextBlock Grid.Column="3" Text="İŞE GİRİŞ" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" />
+                                <TextBlock Grid.Column="4" Text="MAAŞ" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" />
+                                <TextBlock Grid.Column="5" Text="DURUM" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" />
+                                <TextBlock Grid.Column="6" Text="İŞLEMLER" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryText}" TextAlignment="Right"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Table Rows -->
+                        <ListBox Grid.Row="1" ItemsSource="{Binding PersonnelList}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="2*, 2*, 2*, 1.5*, 1.5*, 1.5*, 100" Margin="24,16" Background="Transparent">
+                                        <!-- Personnel Info -->
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="16">
+                                            <!-- Avatar -->
+                                            <Border Width="40" Height="40" CornerRadius="20" ClipToBounds="True" Background="{DynamicResource BorderLightBrush}">
+                                                <Image asyncImage:ImageLoader.Source="{Binding AvatarUrl}" Stretch="UniformToFill"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding FullName}" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" />
+                                                <TextBlock Text="{Binding TcNo, StringFormat='TC: {0}'}" FontSize="12" Foreground="{DynamicResource SecondaryText}" Margin="0,2,0,0"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Position -->
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Position}" FontWeight="Medium" Foreground="{DynamicResource PrimaryText}" />
+                                            <TextBlock Text="{Binding Department}" FontSize="12" Foreground="{DynamicResource SecondaryText}" Margin="0,2,0,0"/>
+                                        </StackPanel>
+
+                                        <!-- Contact -->
+                                        <StackPanel Grid.Column="2" Spacing="4" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <mi:MaterialIcon Kind="EmailOutline" Width="14" Height="14" Foreground="{DynamicResource SecondaryText}"/>
+                                                <TextBlock Text="{Binding Email}" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <mi:MaterialIcon Kind="PhoneOutline" Width="14" Height="14" Foreground="{DynamicResource SecondaryText}"/>
+                                                <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Start Date -->
+                                        <TextBlock Grid.Column="3" Text="{Binding StartDateDisplay}" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryText}" />
+
+                                        <!-- Salary -->
+                                        <TextBlock Grid.Column="4" Text="{Binding SalaryDisplay}" FontWeight="Medium" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryText}" />
+
+                                        <!-- Status -->
+                                        <StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                            <Border Background="{Binding StatusBackground}" CornerRadius="99" Padding="10,4">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                     <Ellipse Width="6" Height="6" Fill="{Binding StatusDotColor}" />
+                                                     <TextBlock Text="{Binding StatusText}" FontSize="12" FontWeight="SemiBold" Foreground="{Binding StatusForeground}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+
+                                        <!-- Actions -->
+                                        <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" VerticalAlignment="Center" x:CompileBindings="False">
+                                             <Button Background="Transparent" Padding="8" CornerRadius="8" Command="{Binding DataContext.EditPersonnelCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}">
+                                                 <mi:MaterialIcon Kind="PencilOutline" Width="18" Height="18" Foreground="{DynamicResource SecondaryText}"/>
+                                             </Button>
+                                             <Button Background="Transparent" Padding="8" CornerRadius="8" Command="{Binding DataContext.DeletePersonnelCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}">
+                                                 <mi:MaterialIcon Kind="TrashCanOutline" Width="18" Height="18" Foreground="#ef4444"/>
+                                             </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+                
+                <!-- Pagination (Bottom) - Simplified to just count -->
+                <Grid ColumnDefinitions="*, Auto" Margin="0,0,0,24">
+                     <TextBlock Grid.Column="0" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryText}" FontSize="14">
+                        <Run Text="Toplam " />
+                        <Run Text="{Binding PersonnelList.Count}" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                        <Run Text=" personel listeleniyor" />
+                    </TextBlock>
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

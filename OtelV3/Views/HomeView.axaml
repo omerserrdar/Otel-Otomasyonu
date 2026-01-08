@@ -1,0 +1,360 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:models="using:OtelV3.Models"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+             x:Class="OtelV3.Views.HomeView"
+             x:DataType="vm:DashboardViewModel">
+             
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32" Spacing="32" MaxWidth="1400">
+            
+            <!-- Stats Cards Section -->
+            <ItemsControl ItemsSource="{Binding StatCards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:StatCard">
+                        <Border Classes="card"
+                                Background="{DynamicResource CardBackground}"
+                                BorderBrush="{DynamicResource BorderColor}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="20"
+                                Margin="0,0,16,0">
+                            <StackPanel Spacing="8">
+                                <!-- Icon and Change Badge Row -->
+                                <Grid>
+                                    <Border Background="{Binding IconBackground}"
+                                            CornerRadius="6"
+                                            Padding="6,3"
+                                            HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                                            <mi:MaterialIcon Kind="{Binding Icon}" 
+                                                            Width="18" Height="18"
+                                                            Foreground="{Binding IconForeground}" />
+                                            <TextBlock Text="{Binding ChangeText}"
+                                                       FontSize="12" FontWeight="SemiBold"
+                                                       Foreground="{Binding IconForeground}"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                                
+                                <!-- Title -->
+                                <TextBlock Text="{Binding Title}"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           Margin="0,4,0,0" />
+                                
+                                <!-- Value -->
+                                <TextBlock Text="{Binding Value}"
+                                           FontSize="30" FontWeight="Bold"
+                                           Foreground="{DynamicResource PrimaryText}"
+                                           LetterSpacing="-0.5" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            <!-- Room Status Section -->
+            <StackPanel Spacing="16">
+                <!-- Section Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel>
+                        <TextBlock Text="Oda Durumları" 
+                                   FontSize="22" FontWeight="Bold"
+                                   Foreground="{DynamicResource PrimaryText}" />
+                        <TextBlock Text="Anlık oda doluluk ve temizlik durumu"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource SecondaryText}"
+                                   Margin="0,4,0,0" />
+                    </StackPanel>
+                    
+                    <!-- Filter Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <Button Classes="filterBtnActive">
+                            <TextBlock Text="Tümü" />
+                        </Button>
+                        <Button Classes="filterBtn">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Ellipse Width="8" Height="8" Fill="{StaticResource EmeraldBrush}" />
+                                <TextBlock Text="{Binding AvailableRoomCount, StringFormat='Boş ({0})'}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="filterBtn">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Ellipse Width="8" Height="8" Fill="{StaticResource PrimaryBrush}" />
+                                <TextBlock Text="{Binding OccupiedRoomCount, StringFormat='Dolu ({0})'}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="filterBtn">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Ellipse Width="8" Height="8" Fill="{StaticResource AmberBrush}" />
+                                <TextBlock Text="{Binding CleaningRoomCount, StringFormat='Temizlik ({0})'}" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                
+                <!-- Room Cards Grid -->
+                <ItemsControl ItemsSource="{Binding Rooms}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="6" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:Room">
+                            <Border Classes="roomCard"
+                                    Background="{DynamicResource CardBackground}"
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="16"
+                                    Margin="0,0,12,12"
+                                    Opacity="{Binding CardOpacity}"
+                                    HorizontalAlignment="Stretch">
+                                <Border.Styles>
+                                    <Style Selector="Border">
+                                        <Setter Property="BorderThickness" Value="4,0,0,0" />
+                                    </Style>
+                                </Border.Styles>
+                                
+                                <Grid>
+                                    <!-- Left border indicator -->
+                                    <Border HorizontalAlignment="Left"
+                                            VerticalAlignment="Stretch"
+                                            Width="4"
+                                            CornerRadius="2"
+                                            Background="{Binding BorderColor}"
+                                            Margin="-16,0,0,0" />
+                                    
+                                    <StackPanel>
+                                        <!-- Room Number and Icon -->
+                                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                            <TextBlock Text="{Binding RoomNumber}"
+                                                       FontSize="18" FontWeight="Bold"
+                                                       Foreground="{DynamicResource PrimaryText}" />
+                                            <mi:MaterialIcon Grid.Column="1"
+                                                            Kind="{Binding StatusIcon}"
+                                                            Width="20" Height="20"
+                                                            Foreground="{Binding IconColor}" />
+                                        </Grid>
+                                        
+                                        <!-- Room Type -->
+                                        <TextBlock Text="{Binding RoomType}"
+                                                   FontSize="11" FontWeight="Medium"
+                                                   Foreground="{DynamicResource SecondaryText}"
+                                                   LetterSpacing="1" />
+                                        
+                                        <!-- Guest Name or Status -->
+                                        <TextBlock Text="{Binding StatusText}"
+                                                   FontSize="13" FontWeight="SemiBold"
+                                                   Foreground="{Binding StatusTextColor}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Margin="0,4,0,0" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            
+            <!-- Recent Reservations Section -->
+            <StackPanel Spacing="16" Margin="0,0,0,32">
+                <!-- Section Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Text="Son Rezervasyonlar" 
+                               FontSize="22" FontWeight="Bold"
+                               Foreground="{DynamicResource PrimaryText}" />
+                    <Button Grid.Column="1" Classes="linkBtn"
+                            Command="{Binding ViewAllReservationsCommand}">
+                        <TextBlock Text="Tümünü Gör" />
+                    </Button>
+                </Grid>
+                
+                <!-- Reservations Table -->
+                <Border Background="{DynamicResource CardBackground}"
+                        BorderBrush="{DynamicResource BorderColor}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        ClipToBounds="True"
+                        BoxShadow="0 1 3 0 #1a000000">
+                    <StackPanel>
+                        <!-- Table Header -->
+                        <Border Background="{DynamicResource CardBackgroundAlt}"
+                                BorderBrush="{DynamicResource BorderColor}"
+                                BorderThickness="0,0,0,1"
+                                Padding="24,16">
+                            <Grid ColumnDefinitions="100,*,150,140,130,100,50">
+                                <TextBlock Grid.Column="0" Text="REZERVASYON ID" 
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           LetterSpacing="0.5" />
+                                <TextBlock Grid.Column="1" Text="MİSAFİR" 
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           LetterSpacing="0.5" />
+                                <TextBlock Grid.Column="2" Text="ODA TİPİ" 
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           LetterSpacing="0.5" />
+                                <TextBlock Grid.Column="3" Text="GİRİŞ / ÇIKIŞ" 
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           LetterSpacing="0.5" />
+                                <TextBlock Grid.Column="4" Text="DURUM" 
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           LetterSpacing="0.5" />
+                                <TextBlock Grid.Column="5" Text="TUTAR" 
+                                           FontSize="11" FontWeight="Bold"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           LetterSpacing="0.5"
+                                           HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="6" />
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Table Body -->
+                        <ItemsControl ItemsSource="{Binding Reservations}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:Reservation">
+                                    <Border Padding="24,16"
+                                            BorderBrush="{DynamicResource BorderColorLight}"
+                                            BorderThickness="0,0,0,1">
+                                        <Border.Styles>
+                                            <Style Selector="Border:pointerover">
+                                                <Setter Property="Background" Value="{DynamicResource BorderLightBrush}" />
+                                            </Style>
+                                        </Border.Styles>
+                                        <Grid ColumnDefinitions="100,*,150,140,130,100,50">
+                                            <!-- Reservation ID -->
+                                            <TextBlock Grid.Column="0" 
+                                                       Text="{Binding ReservationId}"
+                                                       FontSize="13" FontWeight="Medium"
+                                                       Foreground="{DynamicResource PrimaryText}"
+                                                       VerticalAlignment="Center" />
+                                            
+                                            <!-- Guest Info -->
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                                <!-- Avatar -->
+                                                <Border Width="32" Height="32" CornerRadius="16"
+                                                        Background="{Binding AvatarBackground}">
+                                                    <TextBlock Text="{Binding GuestInitials}"
+                                                               FontSize="11" FontWeight="Bold"
+                                                               Foreground="{Binding AvatarForeground}"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center" />
+                                                </Border>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding GuestName}"
+                                                               FontSize="13" FontWeight="SemiBold"
+                                                               Foreground="{DynamicResource PrimaryText}" />
+                                                    <TextBlock Text="{Binding GuestEmail}"
+                                                               FontSize="11"
+                                                               Foreground="{DynamicResource SecondaryText}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                            
+                                            <!-- Room Type -->
+                                            <TextBlock Grid.Column="2" 
+                                                       Text="{Binding RoomType}"
+                                                       FontSize="13"
+                                                       Foreground="{DynamicResource PrimaryText}"
+                                                       VerticalAlignment="Center" />
+                                            
+                                            <!-- Check In/Out Dates -->
+                                            <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding CheckInDate}"
+                                                           FontSize="13" FontWeight="Medium"
+                                                           Foreground="{DynamicResource PrimaryText}" />
+                                                <TextBlock Text="{Binding CheckOutDate}"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource SecondaryText}" />
+                                            </StackPanel>
+                                            
+                                            <!-- Status Badge -->
+                                            <Border Grid.Column="4" 
+                                                    Background="{Binding StatusBackground}"
+                                                    BorderBrush="{Binding StatusBorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="12"
+                                                    Padding="10,4"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <Ellipse Width="6" Height="6" 
+                                                             Fill="{Binding StatusDotColor}" />
+                                                    <TextBlock Text="{Binding StatusText}"
+                                                               FontSize="11" FontWeight="SemiBold"
+                                                               Foreground="{Binding StatusForeground}" />
+                                                </StackPanel>
+                                            </Border>
+                                            
+                                            <!-- Amount -->
+                                            <TextBlock Grid.Column="5" 
+                                                       Text="{Binding Amount}"
+                                                       FontSize="13" FontWeight="Bold"
+                                                       Foreground="{DynamicResource PrimaryText}"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center" />
+                                            
+                                            <!-- More Options -->
+                                            <Button Grid.Column="6" 
+                                                    Classes="menuItem"
+                                                    Padding="4"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center">
+                                                <mi:MaterialIcon Kind="DotsVertical"
+                                                             Width="20" Height="20"
+                                                             Foreground="{DynamicResource SecondaryText}" />
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        
+                        <!-- Table Footer / Pagination -->
+                        <Border Padding="24,16"
+                                BorderBrush="{DynamicResource BorderColorLight}"
+                                BorderThickness="0,1,0,0">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="{Binding Reservations.Count, StringFormat='Son {0} rezervasyon listeleniyor'}"
+                                           FontSize="13"
+                                           Foreground="{DynamicResource SecondaryText}"
+                                           VerticalAlignment="Center" />
+                                
+                                <!-- Hidden fake pagination for dashboard -->
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" IsVisible="False">
+                                    <Button Classes="pageBtn" Padding="8">
+                                        <mi:MaterialIcon Kind="ChevronLeft" Width="16" Height="16" />
+                                    </Button>
+                                    <Button Classes="pageBtn" Background="{StaticResource PrimaryBrush}" 
+                                            Foreground="White" FontWeight="Bold" Content="1" />
+                                    <Button Classes="pageBtn" Content="2" Foreground="{DynamicResource SecondaryText}" />
+                                    <Button Classes="pageBtn" Content="3" Foreground="{DynamicResource SecondaryText}" />
+                                    <TextBlock Text="..." VerticalAlignment="Center" Margin="4,0" Foreground="{DynamicResource SecondaryText}" />
+                                    <Button Classes="pageBtn" Padding="8">
+                                        <mi:MaterialIcon Kind="ChevronRight" Width="16" Height="16" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

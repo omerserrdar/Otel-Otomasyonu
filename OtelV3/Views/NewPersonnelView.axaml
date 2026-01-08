@@ -1,0 +1,263 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="1200"
+             x:Class="OtelV3.Views.NewPersonnelView"
+             x:DataType="vm:NewPersonnelViewModel"
+             Background="{DynamicResource PageBackground}">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="MinHeight" Value="45"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        
+        <Style Selector="ComboBox">
+            <Setter Property="MinHeight" Value="45"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        
+        <Style Selector="DatePicker">
+            <Setter Property="MinHeight" Value="45"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style Selector="RadioButton">
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1" Padding="0,16">
+            <Grid MaxWidth="1200" HorizontalAlignment="Center" ColumnDefinitions="*, Auto" Margin="32,0">
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="Ana Sayfa" Foreground="{DynamicResource SecondaryText}" FontSize="13" />
+                         <mi:MaterialIcon Kind="ChevronRight" Foreground="{DynamicResource SecondaryText}" Width="16" Height="16" />
+                        <TextBlock Text="Personel" Foreground="{DynamicResource SecondaryText}" FontSize="13" />
+                        <mi:MaterialIcon Kind="ChevronRight" Foreground="{DynamicResource SecondaryText}" Width="16" Height="16" />
+                        <TextBlock Text="Yeni Ekle" Foreground="{StaticResource PrimaryBrush}" FontWeight="SemiBold" FontSize="13" />
+                    </StackPanel>
+                    
+                    <TextBlock Text="Yeni Personel Ekle" FontSize="28" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" LetterSpacing="-0.5" Margin="0,4,0,0"/>
+                    <TextBlock Text="Sisteme yeni bir çalışan kaydetmek için formu eksiksiz doldurun." FontSize="15" Foreground="{DynamicResource SecondaryText}" />
+                </StackPanel>
+                
+                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                     <Button Classes="iconBtn">
+                         <Panel>
+                             <mi:MaterialIcon Kind="Bell" Width="22" Height="22" />
+                             <Border Width="10" Height="10" CornerRadius="5" Background="#ef4444" BorderBrush="White" BorderThickness="2" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                         </Panel>
+                     </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" Padding="32,16">
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" ColumnSpan="2" MaxWidth="1800" HorizontalAlignment="Stretch" Margin="0,0,0,24">
+                <Grid.Styles>
+                     <Style Selector="Border.card">
+                         <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+                         <Setter Property="CornerRadius" Value="12"/>
+                         <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+                         <Setter Property="BorderThickness" Value="1"/>
+                         <Setter Property="BoxShadow" Value="0 1 2 0 #0D000000"/>
+                         <Setter Property="Margin" Value="12"/>
+                     </Style>
+                </Grid.Styles>
+
+                <!-- Left Column -->
+                <StackPanel Grid.Column="0" Spacing="24" Margin="0,0,12,0" VerticalAlignment="Top">
+                    <!-- Section 1: Kişisel Bilgiler -->
+                    <Border Classes="card">
+                        <StackPanel>
+                            <!-- Card Header -->
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="32,32,32,24">
+                                <mi:MaterialIcon Kind="Account" Foreground="{StaticResource PrimaryBrush}" Width="24" Height="24"/>
+                                <TextBlock Text="Kişisel Bilgiler" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            </StackPanel>
+                            
+                            <!-- Form Grid -->
+                            <Grid ColumnDefinitions="*, 24, *, 24, *" RowDefinitions="Auto, 24, Auto" Margin="32,0,32,32">
+                                <!-- Row 1 -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Ad" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding FirstName}" Watermark="Örn: Mehmet"/>
+                                </StackPanel>
+                                 <StackPanel Grid.Row="0" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Soyad" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding LastName}" Watermark="Örn: Yılmaz"/>
+                                </StackPanel>
+                                 <StackPanel Grid.Row="0" Grid.Column="4" Spacing="6">
+                                    <TextBlock Text="T.C. Kimlik No" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding TcNo}" Watermark="11 haneli numara" MaxLength="11"/>
+                                </StackPanel>
+
+                                <!-- Row 2 -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Doğum Tarihi" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <CalendarDatePicker SelectedDate="{Binding BirthDate}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Spacing="6">
+                                    <TextBlock Text="Cinsiyet" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <Border Height="45" BorderBrush="#e5e7eb" BorderThickness="0" CornerRadius="8" Padding="4">
+                                         <StackPanel Orientation="Horizontal" Spacing="20" VerticalAlignment="Center">
+                                             <RadioButton Content="Erkek" GroupName="Gender" IsChecked="{Binding Gender, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Erkek}" Command="{Binding $parent[UserControl].((vm:NewPersonnelViewModel)DataContext).SetGenderCommand}" CommandParameter="Erkek"/>
+                                             <RadioButton Content="Kadın" GroupName="Gender" IsChecked="{Binding Gender, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=Kadın}" Command="{Binding $parent[UserControl].((vm:NewPersonnelViewModel)DataContext).SetGenderCommand}" CommandParameter="Kadın"/>
+                                         </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Section 3: Kurumsal & Finansal -->
+                     <Border Classes="card">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="32,32,32,24">
+                                <mi:MaterialIcon Kind="Briefcase" Foreground="{StaticResource PrimaryBrush}" Width="24" Height="24"/>
+                                <TextBlock Text="Kurumsal &amp; Finansal Bilgiler" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*, 24, *, 24, *" RowDefinitions="Auto, 24, Auto" Margin="32,0,32,32">
+                                <!-- Row 1 -->
+                                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Departman" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <ComboBox ItemsSource="{Binding DepartmentOptions}" SelectedItem="{Binding SelectedDepartment}" PlaceholderText="Seçiniz"/>
+                                </StackPanel>
+                                
+                                 <StackPanel Grid.Row="0" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Pozisyon" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <ComboBox ItemsSource="{Binding PositionOptions}" SelectedItem="{Binding SelectedPosition}" PlaceholderText="Seçiniz"/>
+                                </StackPanel>
+                                
+                                 <StackPanel Grid.Row="0" Grid.Column="4" Spacing="6">
+                                    <TextBlock Text="İşe Giriş Tarihi" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <CalendarDatePicker SelectedDate="{Binding StartDate}"/>
+                                </StackPanel>
+
+                                <!-- Row 2 -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Maaş (TL)" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding Salary}" Watermark="0.00"/>
+                                </StackPanel>
+                                
+                                 <StackPanel Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Spacing="6">
+                                    <TextBlock Text="IBAN" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding Iban}" Watermark="XX XXXX XXXX XXXX XXXX XXXX XX" FontFamily="Consolas, Monospace">
+                                         <TextBox.InnerLeftContent>
+                                             <TextBlock Text="TR" FontWeight="Bold" Foreground="#9ca3af" VerticalAlignment="Center" Margin="12,0,4,0"/>
+                                        </TextBox.InnerLeftContent>
+                                    </TextBox>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Right Column -->
+                <StackPanel Grid.Column="1" Spacing="24" Margin="12,0,0,0" VerticalAlignment="Top">
+                    <!-- Section 2: İletişim Bilgileri -->
+                    <Border Classes="card">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="32,32,32,24">
+                                <mi:MaterialIcon Kind="ContactPhone" Foreground="{StaticResource PrimaryBrush}" Width="24" Height="24"/>
+                                <TextBlock Text="İletişim Bilgileri" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*, 24, *" RowDefinitions="Auto, 24, Auto" Margin="32,0,32,32">
+                                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Telefon Numarası" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding Phone}" Watermark="(5XX) XXX XX XX">
+                                        <TextBox.InnerLeftContent>
+                                            <mi:MaterialIcon Kind="Phone" Width="20" Height="20" Foreground="#9ca3af" Margin="12,0,4,0"/>
+                                        </TextBox.InnerLeftContent>
+                                    </TextBox>
+                                </StackPanel>
+                                
+                                 <StackPanel Grid.Row="0" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="E-posta Adresi" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding Email}" Watermark="ornek@email.com">
+                                        <TextBox.InnerLeftContent>
+                                            <mi:MaterialIcon Kind="Email" Width="20" Height="20" Foreground="#9ca3af" Margin="12,0,4,0"/>
+                                        </TextBox.InnerLeftContent>
+                                    </TextBox>
+                                </StackPanel>
+                                
+                                <!-- Address Full Width -->
+                                <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Spacing="6">
+                                    <TextBlock Text="Açık Adres" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding Address}" Watermark="Mahalle, sokak, kapı no..." AcceptsReturn="True" TextWrapping="Wrap" Height="125" VerticalContentAlignment="Top" Padding="12"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Section 4: Acil Durum -->
+                     <Border Classes="card">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="32,32,32,24">
+                                <mi:MaterialIcon Kind="AlertCircle" Foreground="{StaticResource PrimaryBrush}" Width="24" Height="24"/>
+                                <TextBlock Text="Acil Durum İletişim" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*, 24, *, 24, *" RowDefinitions="Auto" Margin="32,0,32,32">
+                                 <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Ad Soyad" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding EmergencyName}"/>
+                                </StackPanel>
+                                
+                                 <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Yakınlık Derecesi" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding EmergencyRelation}" Watermark="Örn: Eşi, Babası"/>
+                                </StackPanel>
+                                
+                                 <StackPanel Grid.Column="4" Spacing="6">
+                                    <TextBlock Text="Telefon" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBox Text="{Binding EmergencyPhone}"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                
+            </Grid>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="{DynamicResource CardBackground}" BorderBrush="#e5e7eb" BorderThickness="0,1,0,0" Padding="32,16">
+             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="16" MaxWidth="1800">
+                <Button Command="{Binding CancelCommand}" Content="İptal Et" Background="{DynamicResource CardBackground}" Foreground="{DynamicResource PrimaryText}" FontWeight="SemiBold" FontSize="14" Padding="24,8" CornerRadius="8" Cursor="Hand" BorderThickness="1" BorderBrush="#d1d5db"/>
+                
+                <Button Command="{Binding SaveCommand}" Background="{StaticResource PrimaryBrush}" CornerRadius="8" Padding="28,8" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                         <mi:MaterialIcon Kind="Check" Width="20" Height="20" Foreground="White" />
+                        <TextBlock Text="Kaydet" FontWeight="Bold" Foreground="White" FontSize="14" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

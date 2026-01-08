@@ -1,0 +1,278 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:mi="using:Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="1000"
+             x:Class="OtelV3.Views.NewReservationView"
+             x:DataType="vm:NewReservationViewModel"
+             Background="{DynamicResource PageBackground}">
+    
+    <ScrollViewer>
+        <StackPanel Margin="24,24,24,48" Spacing="24">
+            
+            <!-- Breadcrumb -->
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="Anasayfa" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource SecondaryText}" />
+                <mi:MaterialIcon Kind="ChevronRight" Width="16" Height="16" Foreground="{DynamicResource SecondaryText}" />
+                <TextBlock Text="Rezervasyonlar" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource SecondaryText}" />
+                <mi:MaterialIcon Kind="ChevronRight" Width="16" Height="16" Foreground="{DynamicResource SecondaryText}" />
+                <TextBlock Text="Yeni Rezervasyon" FontSize="14" FontWeight="Medium" Foreground="{StaticResource PrimaryBrush}" />
+            </StackPanel>
+            
+            <!-- Header -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Yeni Rezervasyon Oluştur" FontSize="30" FontWeight="ExtraBold" Foreground="{DynamicResource PrimaryText}" />
+                <TextBlock Text="Misafir bilgileri ve konaklama detaylarını girerek yeni bir kayıt oluşturun." FontSize="14" Foreground="{DynamicResource SecondaryText}" />
+            </StackPanel>
+            
+            <!-- Main Grid -->
+            <Grid ColumnDefinitions="2*, 24, 1*">
+                
+                <!-- Left Column -->
+                <StackPanel Grid.Column="0" Spacing="24">
+                    
+                    <!-- Guest Info Card -->
+                    <Border Classes="card" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="24">
+                            <!-- Helper Header -->
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="40" Height="40" CornerRadius="20" Background="#1A3b82f6">
+                                    <mi:MaterialIcon Kind="Account" Width="20" Height="20" Foreground="{StaticResource PrimaryBrush}" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Misafir Bilgileri" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource PrimaryText}" />
+                                    <TextBlock Text="Konaklayacak birincil misafirin kimlik bilgileri" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Separator Background="{DynamicResource BorderBrush}" Height="1" />
+                            
+                            <!-- Guest Form Grid -->
+                            <Grid ColumnDefinitions="*, 24, *" RowDefinitions="Auto, 16, Auto, 16, Auto, 16, Auto">
+                                <!-- Customer Selection (Spans 2 cols) -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Spacing="6">
+                                    <TextBlock Text="Kayıtlı Müşteri Seç" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryText}" />
+                                    <ComboBox ItemsSource="{Binding Customers}" 
+                                              SelectedItem="{Binding SelectedCustomer}"
+                                              PlaceholderText="Müşteri seçin veya aşağıya yeni bilgi girin..."
+                                              HorizontalAlignment="Stretch" 
+                                              CornerRadius="8" 
+                                              Padding="12,8" 
+                                              Background="{DynamicResource InputBackground}" 
+                                              BorderBrush="{DynamicResource BorderColor}" 
+                                              BorderThickness="1">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Medium" />
+                                                    <TextBlock Text="{Binding Phone}" Foreground="{DynamicResource SecondaryText}" FontSize="12" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
+                                
+                                <!-- Name -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Adı Soyadı *" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <TextBox Classes="modernInput" Text="{Binding GuestName}" Watermark="Örn: Ahmet Yılmaz" />
+                                </StackPanel>
+                                
+                                <!-- ID -->
+                                <StackPanel Grid.Row="2" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="TC / Pasaport No *" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <TextBox Classes="modernInput" Text="{Binding GuestIdNumber}" Watermark="12345678901" />
+                                </StackPanel>
+                                
+                                <!-- Phone -->
+                                <StackPanel Grid.Row="4" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Telefon Numarası *" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <TextBox Classes="modernInput" Text="{Binding GuestPhone}" Watermark="+90 (5XX) XXX XX XX" />
+                                </StackPanel>
+                                
+                                <!-- Email -->
+                                <StackPanel Grid.Row="4" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="E-posta Adresi" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <TextBox Classes="modernInput" Text="{Binding GuestEmail}" Watermark="ornek@mail.com" />
+                                </StackPanel>
+                                
+                                <!-- Nationality -->
+                                <StackPanel Grid.Row="6" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Uyruk" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <ComboBox ItemsSource="{Binding Nationalities}" SelectedItem="{Binding GuestNationality}" 
+                                              HorizontalAlignment="Stretch" CornerRadius="8" Padding="12,8" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"/>
+                                </StackPanel>
+                                
+                                <!-- Gender -->
+                                <StackPanel Grid.Row="6" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Cinsiyet" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <ComboBox ItemsSource="{Binding Genders}" SelectedItem="{Binding GuestGender}" PlaceholderText="Seçiniz"
+                                              HorizontalAlignment="Stretch" CornerRadius="8" Padding="12,8" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Payment Info Card -->
+                    <Border Classes="card" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="24">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="40" Height="40" CornerRadius="20" Background="#1A10b981">
+                                    <mi:MaterialIcon Kind="Cash" Width="20" Height="20" Foreground="{StaticResource EmeraldBrush}" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Ödeme Bilgileri" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource PrimaryText}" />
+                                    <TextBlock Text="Ödeme yöntemi ve tutar bilgileri" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Separator Background="{DynamicResource BorderBrush}" Height="1" />
+                            
+                            <Grid ColumnDefinitions="*, 24, *" RowDefinitions="Auto, 16, Auto">
+                                <!-- Payment Method -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Ödeme Yöntemi" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <ComboBox ItemsSource="{Binding PaymentMethods}" SelectedItem="{Binding PaymentMethod}"
+                                              HorizontalAlignment="Stretch" CornerRadius="8" Padding="12,8" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"/>
+                                </StackPanel>
+                                
+                                <!-- Payment Status -->
+                                <StackPanel Grid.Row="0" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Ödeme Durumu" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <ComboBox ItemsSource="{Binding PaymentStatuses}" SelectedItem="{Binding PaymentStatus}"
+                                              HorizontalAlignment="Stretch" CornerRadius="8" Padding="12,8" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"/>
+                                </StackPanel>
+                                
+                                <!-- Nightly Rate -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Gecelik Fiyat (₺)" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <Grid>
+                                        <TextBox Classes="modernInput" Text="{Binding NightlyRate}" Padding="32,10,12,10" FontWeight="Bold" />
+                                        <TextBlock Text="₺" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False"/>
+                                    </Grid>
+                                </StackPanel>
+                                
+                                <!-- Total Amount -->
+                                <StackPanel Grid.Row="2" Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Toplam Tutar (₺)" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <Grid>
+                                        <TextBox Classes="modernInput" Text="{Binding TotalAmount, Mode=OneWay}" Padding="32,10,12,10" FontWeight="Bold" IsReadOnly="True" Background="{DynamicResource CardBackgroundAlt}" />
+                                        <TextBlock Text="₺" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                </StackPanel>
+                
+                <!-- Right Column -->
+                <StackPanel Grid.Column="2" Spacing="24">
+                    
+                    <!-- Room Selection Card -->
+                    <Border Classes="card" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="20">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border Width="40" Height="40" CornerRadius="20" Background="#1A3b82f6">
+                                    <mi:MaterialIcon Kind="Hotel" Width="20" Height="20" Foreground="{StaticResource PrimaryBrush}" />
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Oda Seçimi" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource PrimaryText}" />
+                                    <TextBlock Text="Tarih ve oda bilgileri" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Separator Background="{DynamicResource BorderBrush}" Height="1" />
+                            
+                            <!-- Dates -->
+                            <Grid ColumnDefinitions="*, 12, *">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Giriş Tarihi" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <CalendarDatePicker SelectedDate="{Binding CheckInDate}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Çıkış Tarihi" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <CalendarDatePicker SelectedDate="{Binding CheckOutDate}" />
+                                </StackPanel>
+                            </Grid>
+                            
+                            <!-- Duration info -->
+                            <Border Background="{StaticResource PrimaryLight10Brush}" BorderBrush="{StaticResource PrimaryLight10Brush}" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <TextBlock Text="Konaklama Süresi:" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource SecondaryText}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding DurationText}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" />
+                                </Grid>
+                            </Border>
+                            
+                            <!-- Room Type -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Oda Tipi" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                <ComboBox ItemsSource="{Binding RoomTypes}" SelectedItem="{Binding RoomType}"
+                                          HorizontalAlignment="Stretch" CornerRadius="8" Padding="12,8" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"/>
+                            </StackPanel>
+                            
+                             <!-- Room Number -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Oda Numarası" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                            <ComboBox ItemsSource="{Binding AvailableRooms}" SelectedItem="{Binding SelectedRoom}" PlaceholderText="Seçiniz..."
+                                          HorizontalAlignment="Stretch" CornerRadius="8" Padding="12,8" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"/>
+                            </StackPanel>
+                            
+                            <!-- Adults/Children Grid -->
+                            <Grid ColumnDefinitions="*, 12, *">
+                                <!-- Adult Counter -->
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Yetişkin" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8" Background="{DynamicResource InputBackground}">
+                                        <Grid ColumnDefinitions="Auto, *, Auto">
+                                            <Button Grid.Column="0" Command="{Binding DecrementAdultCommand}" Content="-" Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontWeight="Bold" Padding="12,8" CornerRadius="8,0,0,8" VerticalAlignment="Stretch"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding AdultCount}" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <Button Grid.Column="2" Command="{Binding IncrementAdultCommand}" Content="+" Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontWeight="Bold" Padding="12,8" CornerRadius="0,8,8,0" VerticalAlignment="Stretch"/>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                                
+                                <!-- Child Counter -->
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Çocuk" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource SecondaryText}" />
+                                    <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8" Background="{DynamicResource InputBackground}">
+                                        <Grid ColumnDefinitions="Auto, *, Auto">
+                                            <Button Grid.Column="0" Command="{Binding DecrementChildCommand}" Content="-" Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontWeight="Bold" Padding="12,8" CornerRadius="8,0,0,8" VerticalAlignment="Stretch"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding ChildCount}" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <Button Grid.Column="2" Command="{Binding IncrementChildCommand}" Content="+" Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontWeight="Bold" Padding="12,8" CornerRadius="0,8,8,0" VerticalAlignment="Stretch"/>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Special Requests -->
+                    <Border Classes="card" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="12" Padding="24">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="Özel İstekler" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource PrimaryText}" />
+                            <TextBox Classes="modernInput" Text="{Binding SpecialRequests}" Watermark="Misafirin özel istekleri veya resepsiyon notları..." 
+                                     Height="120" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" />
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Actions -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="16">
+                        <Button Content="İptal Et" Command="{Binding CancelCommand}" 
+                                Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontWeight="Bold" FontSize="14" Padding="16,10"
+                                BorderBrush="{DynamicResource BorderColor}" BorderThickness="0" CornerRadius="8" Cursor="Hand" />
+                        
+                        <Button Command="{Binding SaveCommand}" Background="{StaticResource PrimaryBrush}" CornerRadius="8" Padding="24,10" Cursor="Hand">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <mi:MaterialIcon Kind="ContentSave" Width="20" Height="20" Foreground="White" />
+                                <TextBlock Text="Rezervasyonu Kaydet" FontWeight="Bold" Foreground="White" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    
+                </StackPanel>
+                
+            </Grid>
+            
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,428 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OtelV3.ViewModels"
+             xmlns:views="using:OtelV3.Views"
+             x:Class="OtelV3.App"
+             RequestedThemeVariant="Light">
+
+    <Application.DataTemplates>
+        <DataTemplate DataType="{x:Type vm:CustomersViewModel}">
+            <views:CustomersView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NewCustomerViewModel}">
+            <views:NewCustomerView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PersonnelViewModel}">
+            <views:PersonnelView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NewPersonnelViewModel}">
+            <views:NewPersonnelView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FinanceViewModel}">
+            <views:FinanceView />
+        </DataTemplate>
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                
+                <!-- ==================== LIGHT THEME ==================== -->
+                <ResourceDictionary x:Key="Light">
+                    <!-- Page & Surface -->
+                    <SolidColorBrush x:Key="PageBackground" Color="#f6f8f8"/>
+                    <SolidColorBrush x:Key="CardBackground" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="CardBackgroundAlt" Color="#f8fafc"/>
+                    
+                    <!-- Inputs (ÇOK ÖNEMLİ!) -->
+                    <SolidColorBrush x:Key="InputBackground" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="InputBackgroundPointerOver" Color="#f8fafc"/>
+                    <SolidColorBrush x:Key="InputBackgroundFocused" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="InputBorder" Color="#e5e7eb"/>
+                    <SolidColorBrush x:Key="InputBorderPointerOver" Color="#d1d5db"/>
+                    <SolidColorBrush x:Key="InputBorderFocused" Color="#3b82f6"/>
+                    
+                    <!-- Text -->
+                    <SolidColorBrush x:Key="PrimaryText" Color="#111718"/>
+                    <SolidColorBrush x:Key="SecondaryText" Color="#618389"/>
+                    <SolidColorBrush x:Key="MutedText" Color="#94a3b8"/>
+                    <SolidColorBrush x:Key="PlaceholderText" Color="#9ca3af"/>
+                    
+                    <!-- Borders -->
+                    <SolidColorBrush x:Key="BorderColor" Color="#e5e7eb"/>
+                    <SolidColorBrush x:Key="BorderColorLight" Color="#f1f5f9"/>
+                    
+                    <!-- Sidebar & Header -->
+                    <SolidColorBrush x:Key="SidebarBackground" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="HeaderBackground" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="HoverBackground" Color="#f1f5f9"/>
+                    
+                    <!-- DataGrid -->
+                    <SolidColorBrush x:Key="DataGridBackground" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="DataGridRowBackground" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="DataGridRowBackgroundAlt" Color="#f9fafb"/>
+                    <SolidColorBrush x:Key="DataGridHeaderBackground" Color="#f3f4f6"/>
+                    
+                    <!-- Menu Item Selected -->
+                    <SolidColorBrush x:Key="MenuSelectedBackground" Color="#1a3b82f6"/>
+                    
+                    <!-- Legacy compatibility -->
+                    <SolidColorBrush x:Key="BackgroundLightBrush" Color="#f6f8f8"/>
+                    <SolidColorBrush x:Key="SurfaceLightBrush" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="TextMainBrush" Color="#111718"/>
+                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#111718"/>
+                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#618389"/>
+                    <SolidColorBrush x:Key="TextMutedBrush" Color="#94a3b8"/>
+                    <SolidColorBrush x:Key="BorderBrush" Color="#e5e7eb"/>
+                    <SolidColorBrush x:Key="BorderLightBrush" Color="#f1f5f9"/>
+                    <SolidColorBrush x:Key="BackgroundHoverBrush" Color="#f1f5f9"/>
+                    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="PrimaryLight10Brush" Color="#1a3b82f6"/>
+                </ResourceDictionary>
+                
+                <!-- ==================== DARK THEME ==================== -->
+                <ResourceDictionary x:Key="Dark">
+                    <!-- Page & Surface -->
+                    <SolidColorBrush x:Key="PageBackground" Color="#101f22"/>
+                    <SolidColorBrush x:Key="CardBackground" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="CardBackgroundAlt" Color="#243438"/>
+                    
+                    <!-- Inputs (ÇOK ÖNEMLİ - Dark modda koyu olacak!) -->
+                    <SolidColorBrush x:Key="InputBackground" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="InputBackgroundPointerOver" Color="#243438"/>
+                    <SolidColorBrush x:Key="InputBackgroundFocused" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="InputBorder" Color="#2d3b3e"/>
+                    <SolidColorBrush x:Key="InputBorderPointerOver" Color="#3d4b4e"/>
+                    <SolidColorBrush x:Key="InputBorderFocused" Color="#60a5fa"/>
+                    
+                    <!-- Text -->
+                    <SolidColorBrush x:Key="PrimaryText" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="SecondaryText" Color="#9ca3af"/>
+                    <SolidColorBrush x:Key="MutedText" Color="#6b7280"/>
+                    <SolidColorBrush x:Key="PlaceholderText" Color="#6b7280"/>
+                    
+                    <!-- Borders -->
+                    <SolidColorBrush x:Key="BorderColor" Color="#2d3b3e"/>
+                    <SolidColorBrush x:Key="BorderColorLight" Color="#1a2c30"/>
+                    
+                    <!-- Sidebar & Header -->
+                    <SolidColorBrush x:Key="SidebarBackground" Color="#0d1a1d"/>
+                    <SolidColorBrush x:Key="HeaderBackground" Color="#0d1a1d"/>
+                    <SolidColorBrush x:Key="HoverBackground" Color="#2d3b3e"/>
+                    
+                    <!-- DataGrid -->
+                    <SolidColorBrush x:Key="DataGridBackground" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="DataGridRowBackground" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="DataGridRowBackgroundAlt" Color="#243438"/>
+                    <SolidColorBrush x:Key="DataGridHeaderBackground" Color="#0d1a1d"/>
+                    
+                    <!-- Menu Item Selected -->
+                    <SolidColorBrush x:Key="MenuSelectedBackground" Color="#2a60a5fa"/>
+                    
+                    <!-- Legacy compatibility -->
+                    <SolidColorBrush x:Key="BackgroundLightBrush" Color="#101f22"/>
+                    <SolidColorBrush x:Key="SurfaceLightBrush" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="TextMainBrush" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#ffffff"/>
+                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#9ca3af"/>
+                    <SolidColorBrush x:Key="TextMutedBrush" Color="#6b7280"/>
+                    <SolidColorBrush x:Key="BorderBrush" Color="#2d3b3e"/>
+                    <SolidColorBrush x:Key="BorderLightBrush" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="BackgroundHoverBrush" Color="#2d3b3e"/>
+                    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#1a2c30"/>
+                    <SolidColorBrush x:Key="PrimaryLight10Brush" Color="#2a60a5fa"/>
+                </ResourceDictionary>
+                
+            </ResourceDictionary.ThemeDictionaries>
+            
+            <!-- ==================== SHARED RESOURCES ==================== -->
+            <Color x:Key="PrimaryColor">#3b82f6</Color>
+            <SolidColorBrush x:Key="PrimaryBrush" Color="#3b82f6"/>
+            <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#2563eb"/>
+            
+            <!-- Status Colors -->
+            <SolidColorBrush x:Key="SuccessBrush" Color="#15803d"/>
+            <SolidColorBrush x:Key="SuccessLightBrush" Color="#dcfce7"/>
+            <SolidColorBrush x:Key="EmeraldBrush" Color="#10b981"/>
+            <SolidColorBrush x:Key="EmeraldLightBrush" Color="#d1fae5"/>
+            <SolidColorBrush x:Key="AmberBrush" Color="#f59e0b"/>
+            <SolidColorBrush x:Key="AmberLightBrush" Color="#fef3c7"/>
+            <SolidColorBrush x:Key="AmberDarkBrush" Color="#d97706"/>
+            <SolidColorBrush x:Key="WarningBrush" Color="#b91c1c"/>
+            <SolidColorBrush x:Key="WarningLightBrush" Color="#fee2e2"/>
+            <SolidColorBrush x:Key="BlueBrush" Color="#3b82f6"/>
+            <SolidColorBrush x:Key="BlueLightBrush" Color="#dbeafe"/>
+            <SolidColorBrush x:Key="PurpleBrush" Color="#9333ea"/>
+            <SolidColorBrush x:Key="PurpleLightBrush" Color="#f3e8ff"/>
+            <SolidColorBrush x:Key="PinkBrush" Color="#ec4899"/>
+            <SolidColorBrush x:Key="PinkLightBrush" Color="#fce7f3"/>
+            <SolidColorBrush x:Key="OrangeBrush" Color="#ea580c"/>
+            <SolidColorBrush x:Key="OrangeLightBrush" Color="#ffedd5"/>
+            <SolidColorBrush x:Key="IndigoBrush" Color="#4f46e5"/>
+            <SolidColorBrush x:Key="IndigoLightBrush" Color="#e0e7ff"/>
+            <SolidColorBrush x:Key="SlateBrush" Color="#64748b"/>
+            <SolidColorBrush x:Key="SlateLightBrush" Color="#f1f5f9"/>
+            <SolidColorBrush x:Key="SlateDarkBrush" Color="#475569"/>
+            <SolidColorBrush x:Key="RedBrush" Color="#ef4444"/>
+            <SolidColorBrush x:Key="GrayBrush" Color="#6b7280"/>
+            <SolidColorBrush x:Key="GrayLightBrush" Color="#f3f4f6"/>
+        </ResourceDictionary>
+    </Application.Resources>
+    
+    <Application.Styles>
+        <FluentTheme />
+        
+        <!-- ================================================================ -->
+        <!-- GLOBAL CONTROL STYLES - TextBox, ComboBox vb. için tema desteği -->
+        <!-- ================================================================ -->
+        
+        <!-- ==================== TEXTBOX GLOBAL STYLE ==================== -->
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InputBackgroundPointerOver}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorderPointerOver}"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="{DynamicResource InputBackgroundFocused}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocused}"/>
+        </Style>
+        <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="{DynamicResource PlaceholderText}"/>
+        </Style>
+        
+        <!-- ==================== COMBOBOX GLOBAL STYLE ==================== -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+        </Style>
+        <Style Selector="ComboBox:pointerover /template/ Border#Background">
+            <Setter Property="Background" Value="{DynamicResource InputBackgroundPointerOver}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorderPointerOver}"/>
+        </Style>
+        <Style Selector="ComboBox /template/ ContentControl#ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="ComboBox /template/ TextBlock#PlaceholderTextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource PlaceholderText}"/>
+        </Style>
+        
+        <!-- ComboBox Popup/Dropdown -->
+        <Style Selector="ComboBoxItem">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+        </Style>
+        
+        <!-- ==================== NUMERICUPDOWN GLOBAL STYLE ==================== -->
+        <Style Selector="NumericUpDown">
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+        </Style>
+        
+        <!-- ==================== DATEPICKER GLOBAL STYLE ==================== -->
+        <Style Selector="CalendarDatePicker">
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="8,4"/>
+        </Style>
+        
+        <!-- ==================== CHECKBOX GLOBAL STYLE ==================== -->
+        <Style Selector="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        
+        <!-- ==================== RADIOBUTTON GLOBAL STYLE ==================== -->
+        <Style Selector="RadioButton">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        
+        <!-- ==================== LISTBOX GLOBAL STYLE ==================== -->
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+        </Style>
+        
+        <!-- ==================== DATAGRID GLOBAL STYLE ==================== -->
+        <Style Selector="DataGrid">
+            <Setter Property="Background" Value="{DynamicResource DataGridBackground}"/>
+            <Setter Property="RowBackground" Value="{DynamicResource DataGridRowBackground}"/>
+        </Style>
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="Background" Value="{DynamicResource DataGridHeaderBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+        </Style>
+        <Style Selector="DataGridRow">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="DataGridRow:nth-child(even)">
+            <Setter Property="Background" Value="{DynamicResource DataGridRowBackgroundAlt}"/>
+        </Style>
+        <Style Selector="DataGridCell">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        
+        <!-- ==================== SCROLLVIEWER ==================== -->
+        <Style Selector="ScrollViewer">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        
+        <!-- ==================== BUTTON GLOBAL STYLE ==================== -->
+        <Style Selector="Button">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        
+        <!-- ================================================================ -->
+        <!-- CUSTOM STYLES (Classes) -->
+        <!-- ================================================================ -->
+        
+        <!-- SIDEBAR MENU -->
+        <Style Selector="Button.menuItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.menuItem:pointerover">
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="Button.menuItemSelected">
+            <Setter Property="Background" Value="{DynamicResource MenuSelectedBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        
+        <!-- ICON BUTTON -->
+        <Style Selector="Button.iconBtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.iconBtn:pointerover">
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        
+        <!-- CARD (Border.card) -->
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BoxShadow" Value="0 1 2 0 #0D000000"/>
+        </Style>
+        <Style Selector="Border.card:pointerover">
+            <Setter Property="BoxShadow" Value="0 4 6 -1 #1a000000"/>
+        </Style>
+        
+        <!-- FILTER BUTTONS -->
+        <Style Selector="Button.filterBtn">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.filterBtn:pointerover">
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+        </Style>
+        <Style Selector="Button.filterBtnActive">
+            <Setter Property="Background" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="Foreground" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        
+        <!-- ROOM CARD -->
+        <Style Selector="Border.roomCard">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="BoxShadow" Value="0 1 2 0 #0D000000"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Border.roomCard:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+            <Setter Property="BoxShadow" Value="0 10 15 -3 #1a000000"/>
+        </Style>
+        
+        <!-- LINK BUTTON -->
+        <Style Selector="Button.linkBtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.linkBtn:pointerover">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+        
+        <!-- PAGE BUTTON -->
+        <Style Selector="Button.pageBtn">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.pageBtn:pointerover">
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+        </Style>
+        
+        <!-- MODERN INPUT -->
+        <Style Selector="TextBox.modernInput">
+            <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="TextBox.modernInput:focus">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        </Style>
+        
+    </Application.Styles>
+    
+</Application>
